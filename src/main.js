@@ -11,6 +11,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(ElementUI);
 
+import { Tabbar, TabbarItem } from 'vant';//tarbar
+Vue.use(Tabbar).use(TabbarItem);
+import { Search } from 'vant';//search
+Vue.use(Search);
+import { Field } from 'vant';//输入框
+Vue.use(Field);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
