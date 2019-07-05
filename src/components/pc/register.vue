@@ -1,16 +1,16 @@
 <template>
   <div id="register">
-    <div class="register con">
-      <h2>註冊</h2>
+    <div class="register con" >
+      <h2>注册</h2>
       <div class="username">
         <el-input placeholder="请输入内容" v-model="username" clearable></el-input>
       </div>
       <div class="password">
-        <el-input placeholder="请输入密码" v-model="password" show-password></el-input>
+        <el-input placeholder="请输入密码" v-model="password" show-password clearable></el-input>
       </div>
-      <el-input placeholder="请输入密码" v-model="password2" show-password></el-input>
-      <p>帳號或密碼錯誤，請重新輸入</p>
-      <button>登陸</button>
+      <el-input placeholder="请输入密码" v-model="password2" show-password clearable></el-input>
+      <p>账户或密码错误，请重新输入</p>
+      <button @click="$goto('usercheck')">注册新账号</button>
     </div>
   </div>
 </template>
@@ -21,8 +21,11 @@ export default {
     return {
       username: "",
       password: "",
-      password2: ""
+      password2: "",
     };
+  },
+  methods:{
+ 
   }
 };
 </script>
@@ -47,9 +50,23 @@ export default {
 </style>
 <style lang='scss' scoped>
 #register {
-  height: 600px;
+  height: 700px;
   width: 100%;
   margin-top: 133px;
+}
+.register2{
+  width: 553px;
+  height: 460px;
+  text-align: center;
+  nav{
+    img{
+       vertical-align: middle;
+    }
+    span{
+       vertical-align: middle;
+    }
+
+  }
 }
 .register {
   width: 553px;
@@ -57,6 +74,10 @@ export default {
   box-shadow: 0px 0px 8px #e8e8e8;
   text-align: center;
   overflow: hidden;
+  p {
+    color: #f36d6c;
+    line-height: 40px;
+  }
   h2 {
     margin: 34px 0 48px 0;
     font: {
@@ -68,7 +89,10 @@ export default {
     background: #00adef;
     width: 470px;
     height: 40px;
-    margin-top: 67px;
+    margin-top: 60px;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
     // color:
   }
 }
