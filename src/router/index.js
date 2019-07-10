@@ -8,9 +8,6 @@ import project_intro from '@/components/pc/project_intro'
 import mysign from '@/components/pc/mysign'
 import goods_details from '@/components/pc/goods_details'
 import userpass from '@/components/pc/userpass'
-import mhome from '@/components/moblie/mhome'
-import mine from '@/components/moblie/mine'
-import mpro_sign from '@/components/moblie/mpro_sign'
 // moblie
 
 Vue.use(Router);
@@ -38,21 +35,6 @@ const routes = [{
     //   requireAuth: true
     // }
   }, 
-  {
-    path: '/mhome',
-    name: 'mhome',
-    component: mhome,
-  },
-   {
-    path: '/mpro_sign',
-    name: 'mpro _sign',
-    component: mpro_sign,
-  },
-  {
-    path: '/mine',
-    name: 'mine',
-    component: mine,
-  },
   {
     path: '/project_intro',
     name: 'project_intro',

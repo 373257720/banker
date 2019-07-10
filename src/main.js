@@ -4,23 +4,68 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import "./css/base.css";
+import axios from 'axios'
+import store from './store/store'
 Vue.config.productionTip = false
-
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(ElementUI);
 
-import { Tabbar, TabbarItem } from 'vant';//tarbar
-Vue.use(Tabbar).use(TabbarItem);
-import { Search } from 'vant';//search
-Vue.use(Search);
-import { Field } from 'vant';//输入框
-Vue.use(Field);
+Vue.prototype.$goto = function goto(name, id) {
+  // 路由传参
+  let obj = {
+    name
+  };
+  // console.log(obj)
+  if (id) {
+    obj.params = {
+      id
+    };
+  }
+  this.$router.push(obj);
+}
+
+// 设置axios为form-data
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+// axios.defaults.transformRequest = [function (data) {
+//     let ret = ''
+//     for (let it in data) {
+//       ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+//     }
+//     return ret
+// }]
+//让ajax携带cookie
+axios.defaults.withCredentials = true;
+Vue.prototype.$axios = axios
+//设置baseurl
+var baseurl = {
+  //  api: "http://4coins.wearetechman.com",
+  api: "http://192.168.1.37:8080",
+  //  api: "http://192.168.1.37:8080",
+}
+Vue.prototype.$baseurl = baseurl.api
+
+// console.log(window.location.href);
+//   if (isMobile() && window.location.href=="http://localhost:8080/#/") {
+//     window.location.href="http://www.baidu.com"
+//   }
+function isMobile() {
+  let flag = navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  );
+  return flag;
+}
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  store,
+  components: {
+    App
+  },
   template: '<App/>'
 })

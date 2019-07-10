@@ -87,6 +87,13 @@ export default {
     height: 1100px;
     .pro_pic {
       height: 120px;
+      overflow:hidden;
+      
+      img{
+          // vertical-align:bottom;
+          width: 1200px;
+
+      }
     }
     article {
       position: relative;

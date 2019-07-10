@@ -12,7 +12,7 @@
             <!-- <p>账号或密码错误，请重新输入</p> -->
             <span>忘记密码？</span>
           </section>
-          <button @click="$goto('home')">登 录</button>
+          <button @click="login">登 录</button>
         </div>
         <div class="main_right fr">
           <h2>您是新用戶吗？</h2>
@@ -33,7 +33,50 @@ export default {
       password: ""
     };
   },
-  methods:{
+  methods: {
+    login() {
+      if (this.username && this.password) {
+        this.$axios({
+          method: "post",
+          url: `${this.$baseurl}/bsl_web/user/login.do`,
+          data: {
+            bslEmail: this.username,
+            bslPwd: this.password
+          },
+          transformRequest: [
+            function(data) {
+              let ret = "";
+              for (let it in data) {
+                ret +=
+                  encodeURIComponent(it) +
+                  "=" +
+                  encodeURIComponent(data[it]) +
+                  "&";
+              }
+              return ret;
+            }
+          ],
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        }).then(res => {
+          var rescode = res.data.resultCode;
+          if (rescode == 10000) {
+            console.log("登陆成功");
+            this.$store.dispatch("setUser", this.username);
+            this.$goto("home");
+          } else if (rescode == 10011) {
+            console.log("登录账号不能为空");
+          } else if (rescode == 10012) {
+            console.log("邮箱地址无效请重新输入");
+          } else if ((rescode = 10014)) {
+            console.log("该邮箱已注册，请登录");
+          }
+        });
+      } else {
+        this.remind = "账号和密码不能为空，请输入 ";
+      }
+    }
   }
 };
 </script>
@@ -58,7 +101,6 @@ export default {
   width: 100%;
   height: 600px;
   margin-top: 133px;
-
 }
 .main {
   height: 600px;
@@ -97,7 +139,7 @@ export default {
       height: 40px;
       margin-top: 60px;
       font-size: 18px;
-      color:white;
+      color: white;
       font-weight: 700;
       // color:
     }
@@ -109,8 +151,8 @@ export default {
     button {
       width: 468px;
       height: 40px;
-       font-size: 18px;
-      color:white;
+      font-size: 18px;
+      color: white;
       font-weight: 700;
       background: #ff7c2c;
       margin-bottom: 20px;

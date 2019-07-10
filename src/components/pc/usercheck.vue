@@ -6,10 +6,10 @@
         <p>国籍</p>
         <el-select v-model="value" filterable placeholder="请选择">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="(item,idx) in countrydata"
+            :key="item.countryCode"
+            :label="item.countryTcname"
+            :value="idx"
           ></el-option>
         </el-select>
       </div>
@@ -72,21 +72,28 @@
         <p>公司名称</p>
         <el-input placeholder="请输入内容" v-model="companyname" clearable></el-input>
       </div>
+      <div class="companyname">
+        <p>公司名称</p>
+        <el-input placeholder="请输入内容" v-model="CompanynameEn" clearable></el-input>
+      </div>
       <div class="companycheck">
         <p>公司证书</p>
         <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
+          action
+          list-type="picture-card"
+          :http-request="uploadFile"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="appear4"
+          :on-error="appear4"
+          :on-change="dispear4"
+          :limit="1"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <i class="el-icon-plus"></i>
         </el-upload>
       </div>
       <div class="commit">
-        <button @click="$goto('login')">提交</button>
+        <button @click="commit">提交</button>
+        <!-- <button @click="$goto('login')">提交</button> -->
       </div>
     </div>
   </div>
@@ -96,27 +103,19 @@ export default {
   name: "usercheck",
   data() {
     return {
-      options: [
-        {
-          value: 0,
-          label: "中国"
-        },
-        {
-          value: 1,
-          label: "香港"
-        },
-        {
-          value: 2,
-          label: "其他"
-        }
-      ],
       // success: true,
-      value: "",
+      value: "", //国家名字
       idnum: "",
-      companyname: "",
-      imageUrl: "",
+      idType: "",
       dialogVisible: false,
-      dialogImageUrl: ""
+      dialogImageUrl: "",
+      formData: "",
+      countrydata: [],
+      identityPicOne: "",
+      identityPicTwo: "",
+      companyname: "",
+      CompanynameEn: "",
+      userCompanyPic: ""
     };
   },
   computed: {
@@ -128,7 +127,84 @@ export default {
       }
     }
   },
+  created() {
+    this.$axios
+      .get(`${this.$baseurl}/bsl_web/base/countryList`, {
+        transformRequest: [
+          function(data) {
+            let ret = "";
+            for (let it in data) {
+              ret +=
+                encodeURIComponent(it) +
+                "=" +
+                encodeURIComponent(data[it]) +
+                "&";
+            }
+            return ret;
+          }
+        ],
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      })
+      .then(res => {
+        this.countrydata = [...res.data.data];
+        //  console.log(this.countrydata);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+  watch: {
+    value: function(neww, oldd) {
+      // console.log(neww,oldd);
+      if (neww == 0 || neww == 1 || neww == 2) {
+        this.idType = 1;
+      } else {
+        this.idType = 2;
+      }
+    }
+  },
   methods: {
+    commit() {
+      // console.log(this.countrydata[this.value]);
+      var num = this.countrydata[this.value].countrySort;
+      // var userCountryEn=this.countrydata[this.value].countryEnname
+      // var  userCountryCh=this.countrydata[this.value].countryZhname
+      // if (this.countrydata[this.value]) {
+      //   if (num == 0 || num == 1 || num == 2) {
+      //     this.idType = 1;
+      //   } else {
+      //     this.idType = 2;
+      //   }
+      // }
+
+      this.$axios({
+        method: "post",
+        url: `${this.$baseurl}/bsl_web/user/submitAuth`,
+        data: {
+          userCountry: this.value,
+          userCountryEn: userCountryEn,
+          userCountryCh: userCountryCh,
+          userIdentity: this.idnum,
+          identityType: this.idType
+          // identityPicOne:
+          // identityPicTwo:
+          // userCompanyCh:
+          // userCompanyEn:
+          // userCompanyPic:
+        },
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     choose(a) {
       var b = document.querySelector(a);
       b.style = "display:none;";
@@ -164,15 +240,33 @@ export default {
     dispear3(file, fileList) {
       this.choose(".idcard2 .el-upload--picture-card");
     },
+    dispear4(file, fileList) {
+      this.choose(".companycheck .el-upload--picture-card");
+    },
     //文件列表移除文件时的钩子
     appear() {
-      this.handleRemove(".idcard_left .el-upload--picture-card",".idcard_left .el-upload-list__item")
+      this.handleRemove(
+        ".idcard_left .el-upload--picture-card",
+        ".idcard_left .el-upload-list__item"
+      );
     },
     appear2() {
-       this.handleRemove(".idcard_right .el-upload--picture-card",".idcard_right .el-upload-list__item")
+      this.handleRemove(
+        ".idcard_right .el-upload--picture-card",
+        ".idcard_right .el-upload-list__item"
+      );
     },
     appear3() {
-       this.handleRemove(".idcard2 .el-upload--picture-card",".idcard2 .el-upload-list__item")
+      this.handleRemove(
+        ".idcard2 .el-upload--picture-card",
+        ".idcard2 .el-upload-list__item"
+      );
+    },
+    appear4() {
+      this.handleRemove(
+        ".companycheck .el-upload--picture-card",
+        ".companycheck .el-upload-list__item"
+      );
     },
     //点击文件列表中已上传的文件时的钩子,图片放大镜
     handlePictureCardPreview(file) {
@@ -182,17 +276,26 @@ export default {
     // 自定义上传
     // 文件上传
     uploadFile(params) {
-      // console.log(params);
-      // console.log("uploadFile", params);
-      this.pic_submitok = false;
+      console.log(params);
       const _file = params.file;
       // const isLt2M = _file.size / 1024 / 1024 < 2;
       // 通过 FormData 对象上传文件
-      if (_file) {
-        this.pic_submitok = true;
-      }
       this.formData = new FormData();
       this.formData.append("file", _file);
+      this.$axios({
+        method: "post",
+        url: `${this.$baseurl}/bsl_web/upload/pic.do`,
+        data: this.formData,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
       // if (!isLt2M) {
       //   this.$message.error("请上传2M以下的.xlsx文件");
       //   return false;
@@ -201,22 +304,7 @@ export default {
     // 确认上传
     submitUpload() {
       this.$refs.upload.submit();
-      // this.goto();
-      // this.$axios({
-      //   data: this.formData,
-      //   url: `${this.$baseurl}/growthing-02/users/wallet_data`,
-      //   method: "get"
-      // })
-      //   .then(res => {
-      //     console.log(111);
-
-      //     // this.$router.push({
-      //     //   name: "home"
-      //     // });
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
+      this.goto();
     }
   }
 };
@@ -242,11 +330,22 @@ export default {
   .el-upload--picture-card {
     width: 736px;
   }
+  .el-upload-list__item {
+    width: 736px;
+    height: 184px;
+  }
 }
 .companycheck {
-  .el-upload--text {
+  .el-upload--picture-card {
     width: 736px;
-    height: 215px;
+    height: 184px;
+    border: 1px solid #ababab;
+    background: #f6f6f6;
+    line-height: 184px;
+  }
+  .el-upload-list__item {
+    width: 736px;
+    height: 184px;
   }
 }
 .usercheck {
@@ -317,7 +416,8 @@ export default {
       height: 210px;
     }
     .companycheck {
-      height: 245px;
+      height: 210px;
+      position: relative;
       p {
         margin-bottom: 5px;
       }

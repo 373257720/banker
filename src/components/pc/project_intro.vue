@@ -13,12 +13,12 @@
         <button @click='goto'>簽約</button>
       </footer>
     </div>
-    <div class="project_intro2 con" v-if="!success">
+    <!-- <div class="project_intro2 con" v-if="!success">
       <nav>
-        <!-- <img src="../../assets/19b9f427bcaefd8a3e879024299a204.png" alt /> -->
+        <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt />
         <span>您已注册成功{{time}}s</span>
       </nav>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
