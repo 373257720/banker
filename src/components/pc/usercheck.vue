@@ -2,6 +2,17 @@
   <div id="usercheck">
     <div class="usercheck con">
       <h2>审核</h2>
+       <div class="nationality">
+        <p>类型</p>
+        <el-select v-model="value" filterable placeholder="请选择">
+          <el-option
+            v-for="(item,idx) in countrydata"
+            :key="item.countryCode"
+            :label="item.countryTcname"
+            :value="idx"
+          ></el-option>
+        </el-select>
+      </div>
       <div class="nationality">
         <p>国籍</p>
         <el-select v-model="value" filterable placeholder="请选择">
@@ -27,7 +38,7 @@
             ref="upload"
             action
             list-type="picture-card"
-            :http-request="uploadFile"
+            :http-request="function(params){return uploadFile(params,1)}"
             :on-preview="handlePictureCardPreview"
             :on-remove="appear"
             :on-error="appear"
@@ -42,7 +53,7 @@
           <el-upload
             action
             list-type="picture-card"
-            :http-request="uploadFile"
+            :http-request="function(params){return uploadFile(params,2)}"
             :on-preview="handlePictureCardPreview"
             :on-remove="appear2"
             :on-error="appear2"
@@ -58,7 +69,7 @@
         <el-upload
           action
           list-type="picture-card"
-          :http-request="uploadFile"
+          :http-request="function(params){return uploadFile(params,1)}"
           :on-preview="handlePictureCardPreview"
           :on-remove="appear3"
           :on-error="appear3"
@@ -81,7 +92,7 @@
         <el-upload
           action
           list-type="picture-card"
-          :http-request="uploadFile"
+          :http-request="function(params){return uploadFile(params,3)}"
           :on-preview="handlePictureCardPreview"
           :on-remove="appear4"
           :on-error="appear4"
@@ -115,12 +126,12 @@ export default {
       identityPicTwo: "",
       companyname: "",
       CompanynameEn: "",
-      userCompanyPic: ""
+      CompanyPic: ""
     };
   },
   computed: {
     success: function() {
-      if (this.value != 0 && this.value != 1) {
+      if (this.value != 0 && this.value != 1 && this.value != 2) {
         return true;
       } else {
         return false;
@@ -157,7 +168,6 @@ export default {
   },
   watch: {
     value: function(neww, oldd) {
-      // console.log(neww,oldd);
       if (neww == 0 || neww == 1 || neww == 2) {
         this.idType = 1;
       } else {
@@ -166,36 +176,52 @@ export default {
     }
   },
   methods: {
+    onsuccess(res,fild,index){
+        console.log(index);
+        
+    },
     commit() {
-      // console.log(this.countrydata[this.value]);
       var num = this.countrydata[this.value].countrySort;
-      // var userCountryEn=this.countrydata[this.value].countryEnname
-      // var  userCountryCh=this.countrydata[this.value].countryZhname
-      // if (this.countrydata[this.value]) {
-      //   if (num == 0 || num == 1 || num == 2) {
-      //     this.idType = 1;
-      //   } else {
-      //     this.idType = 2;
-      //   }
-      // }
-
+      var userCountryEn=this.countrydata[this.value].countryEnname
+      var  userCountryCh=this.countrydata[this.value].countryZhname
+      if (this.countrydata[this.value]) {
+        if (num == 0 || num == 1 || num == 2) {
+          this.idType = 1;
+        } else {
+          this.idType = 2;
+        }
+      }
+     var data1= {
+          userCountry: this.countrydata[this.value].countryCode,
+          userCountryEn:userCountryEn,
+          userCountryCh:userCountryCh,
+          userIdentity: this.idnum,
+          identityType: this.idType,
+          identityPicOne:this.identityPicOne,
+          identityPicTwo:this.identityPicTwo,
+          userCompanyCh:this.companyname,
+          userCompanyEn:this. CompanynameEn,
+          userCompanyPic:this.CompanyPic
+        }
       this.$axios({
         method: "post",
         url: `${this.$baseurl}/bsl_web/user/submitAuth`,
-        data: {
-          userCountry: this.value,
-          userCountryEn: userCountryEn,
-          userCountryCh: userCountryCh,
-          userIdentity: this.idnum,
-          identityType: this.idType
-          // identityPicOne:
-          // identityPicTwo:
-          // userCompanyCh:
-          // userCompanyEn:
-          // userCompanyPic:
-        },
+        data: data1,
+           transformRequest: [
+            function(data) {
+              let ret = "";
+              for (let it in data) {
+                ret +=
+                  encodeURIComponent(it) +
+                  "=" +
+                  encodeURIComponent(data[it]) +
+                  "&";
+              }
+              return ret;
+            }
+          ],
         headers: {
-          "Content-Type": "multipart/form-data"
+            "Content-Type": "application/x-www-form-urlencoded"
         }
       })
         .then(res => {
@@ -275,8 +301,8 @@ export default {
     },
     // 自定义上传
     // 文件上传
-    uploadFile(params) {
-      console.log(params);
+    uploadFile(params,index) {
+      // console.log(params,index);
       const _file = params.file;
       // const isLt2M = _file.size / 1024 / 1024 < 2;
       // 通过 FormData 对象上传文件
@@ -291,7 +317,14 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
+         var imgurl= res.data.data.url;
+          if(index==1){
+           this.identityPicOne=imgurl
+          }else if(index==2){
+             this.identityPicTwo=imgurl
+          }else if(index==3){
+              this.CompanyPic=imgurl
+          }
         })
         .catch(err => {
           console.log(err);
@@ -362,10 +395,10 @@ export default {
 
 <style lang="scss" scoped>
 #usercheck {
-  height: 1050px;
+  height: 1180px;
   width: 100%;
   .usercheck {
-    height: 1050px;
+    height: 1180px;
     // overflow: hidden;
     h2 {
       text-align: center;

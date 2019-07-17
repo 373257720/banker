@@ -5,7 +5,9 @@ import register from '@/components/pc/register'
 import login from '@/components/pc/login'
 import usercheck from '@/components/pc/usercheck'
 import project_intro from '@/components/pc/project_intro'
+import sign_request from '@/components/pc/sign_request'
 import mysign from '@/components/pc/mysign'
+import mysign_pro from '@/components/pc/mysign_pro'
 import goods_details from '@/components/pc/goods_details'
 import userpass from '@/components/pc/userpass'
 // moblie
@@ -36,6 +38,11 @@ const routes = [{
     // }
   }, 
   {
+    path: '/sign_request',
+    name: 'sign_request',
+    component: sign_request,
+  },
+  {
     path: '/project_intro',
     name: 'project_intro',
     component: project_intro,
@@ -49,6 +56,11 @@ const routes = [{
     path: '/mysign',
     name: 'mysign',
     component: mysign,
+  },
+  {
+    path: '/mysign_pro',
+    name: 'mysign_pro',
+    component: mysign_pro,
   },
   {
     path: '/goods_details',

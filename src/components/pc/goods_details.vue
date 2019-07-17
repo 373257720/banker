@@ -40,7 +40,8 @@ export default {
         "項目介紹:",
         "集資金額:",
         "聯繫電話:",
-        "電郵:"
+        "電郵:",
+        "签约方："
       ]
     };
   }
@@ -78,8 +79,9 @@ export default {
       article {
         width: 320px;
         li {
-          margin-bottom: 20px;
+          margin-bottom: 40px;
           font-weight: 600;
+          
         }
       }
       aside {

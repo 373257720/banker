@@ -20,18 +20,18 @@
       </nav>
       <main>
         <div class="idcard">
-          <div class="idcard_left fl">
+          <div class="idcard_left">
             <p>身份证正面</p>
             <div class="pic"></div>
           </div>
-          <div class="idcard_right fr">
+          <div class="idcard_right">
             <p>身份证反面</p>
             <div class="pic"></div>
           </div>
         </div>
         <div class="idcard idcard2" v-if="success">
           <p>passport</p>
-            <div class="pic"></div>
+          <div class="pic"></div>
         </div>
       </main>
       <section>
@@ -52,7 +52,7 @@ export default {
   width: 100%;
   .userpass {
     height: 872px;
-    width: 580px;
+    width: 680px;
     margin: 0 auto;
     header {
       font-size: 24px;
@@ -68,12 +68,16 @@ export default {
     main {
       height: 210px;
       margin-bottom: 20px;
+      .idcard {
+        display: flex;
+        justify-content: space-between;
+      }
       p {
         margin-bottom: 5px;
       }
       .pic {
-        height: 180px;
-        width: 284px;
+        height: 200px;
+        width: 300px;
         border: 1px solid #ababab;
         border-radius: 5px;
         background: #f6f6f6;
