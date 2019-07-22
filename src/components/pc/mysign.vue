@@ -3,7 +3,7 @@
     <div class="mysign con">
       <nav>我的簽約項目</nav>
       <ul>
-        <li>
+        <li @click="$goto('goods_details')">
           <p>項目名稱：的馮紹峰地方水電費</p>
           <section>計劃時間</section>
         </li>

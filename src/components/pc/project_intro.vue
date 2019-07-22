@@ -6,19 +6,19 @@
         <aside>
           <!-- <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt /> -->
         </aside>
-        <article>灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 多的字而的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因</article>
+        <article>灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 多的字而的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因</article>
       </main>
       <footer>
         <button @click="$goto('home')">再考慮一下</button>
         <button @click='goto'>簽約</button>
       </footer>
     </div>
-    <!-- <div class="project_intro2 con" v-if="!success">
+    <div class="project_intro2 con" v-if="!success">
       <nav>
         <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt />
         <span>您已注册成功{{time}}s</span>
       </nav>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -50,15 +50,15 @@ export default {
     //   "project_intro_length"
     // ).offsetHeight;
     // console.log(document);
-    // console.log( document.getElementById("project_intro").offsetHeight,document.getElementById("project_intro_length").offsetHeight);
-    var a = document.getElementById("project_intro").offsetHeight;
-    // var b = document.getElementById("project_intro_length").offsetHeight;
-    if (a < 1000) {
-      // a += b - a;
-      document.getElementById("project_intro").style.height = 1000 + "px";
-      document.getElementsByClassName("project_intro")[0].style.height =
-        1000 + "px";
-    }
+    // // console.log( document.getElementById("project_intro").offsetHeight,document.getElementById("project_intro_length").offsetHeight);
+    // var a = document.getElementById("project_intro").offsetHeight;
+    // // var b = document.getElementById("project_intro_length").offsetHeight;
+    // if (a < 1000) {
+    //   // a += b - a;
+    //   document.getElementById("project_intro").style.height = 1000 + "px";
+    //   document.getElementsByClassName("project_intro")[0].style.height =
+    //     1000 + "px";
+    // }
 
     // console.log(a, b);
 
@@ -68,11 +68,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 #project_intro {
-  // height: 870px;
+  
   width: 100%;
   .project_intro2 {
     width: 553px;
-    height: 460px;
+     height: 850px;
     text-align: center;
     nav {
       img {

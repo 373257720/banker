@@ -15,9 +15,9 @@
       <main>
         <article>
           <ul>
-            <li v-for="(item) in details_lists" :key="item">
-              <p>{{item}}</p>
-              <p></p>
+            <li v-for="(item) in details_lists" :key="item.name">
+              <p>{{item.name}}</p>
+              <p>{{item.content}}</p>
             </li>
           </ul>
         </article>
@@ -35,13 +35,34 @@ export default {
   data() {
     return {
       details_lists: [
-        "公司名稱:",
-        "是否上市公司:",
-        "項目介紹:",
-        "集資金額:",
-        "聯繫電話:",
-        "電郵:",
-        "签约方："
+        {
+          name: "公司名称:",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        },
+        {
+          name: "是否上市公司:",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        },
+        {
+          name: "项目介绍:",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        },
+        {
+          name: "集资金额:",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        },
+        {
+          name: "联系电话:",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        },
+        {
+          name: "电邮:",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        },
+        {
+          name: "签约方：",
+          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+        }
       ]
     };
   }
@@ -50,15 +71,16 @@ export default {
 <style lang="scss" scoped>
 #goods_details {
   width: 100%;
-  height: 870px;
+  margin:30px 0;
+  // height: 870px;
   .goods_details {
-    height: 870px;
+    // height: 870px;
     width: 664px;
     margin: 0 auto;
     header {
       font-size: 36px;
       font-weight: 500;
-      margin: 30px 0;
+      margin-bottom: 30px;
       border-bottom: 1px solid black;
     }
     nav {
@@ -80,14 +102,24 @@ export default {
         width: 320px;
         li {
           margin-bottom: 40px;
-          font-weight: 600;
-          
+
+          p:nth-of-type(1) {
+            font-weight: 600;
+            font-size: 16px;
+            // line-height: 16px;
+          }
+          p:nth-of-type(2) {
+            font-size: 14px;
+            line-height: 24px;
+          }
         }
       }
       aside {
         width: 320px;
         height: 400px;
-        background: red;
+         border-radius: 5px;
+        // background: red;
+        border: 1px solid #ababab;
       }
     }
     footer {
@@ -97,9 +129,8 @@ export default {
       text-align: center;
       line-height: 40px;
       color: white;
-      border-radius: 2px;
-      margin-top: 72px;
-      margin: 72px auto 0;
+      border-radius: 2px;   
+      margin: 0 auto;
     }
   }
 }

@@ -2,12 +2,12 @@
   <div id="mysign_pro">
     <div class="mysign_pro con">
       <div class="title">
-        <!-- <p>{{$t('history.History')}}</p> -->
+        <p>我的项目</p>
       </div>
       <div class="box_tap">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="签约请求" name="first">
-            <div class="norecord" v-if="transferdata.length<=0">1</div>
+            <div class="norecord" v-if="transferdata.length<=0">没有记录</div>
             <historytable
               :transfer="transferdata"
               :tablehead="transferhead"
@@ -15,7 +15,7 @@
             ></historytable>
           </el-tab-pane>
           <el-tab-pane label="签约项目" name="second">
-            <div class="norecord" v-if="exchangedata.length<=0">2</div>
+            <div class="norecord" v-if="exchangedata.length<=0">没有记录</div>
             <historyexchange
               :transfer="exchangedata"
               :tablehead="exchangehead"
@@ -84,24 +84,24 @@ export default {
     //   })
     //   .catch(err => {});
 
-      // this.$axios
-      //   .get(`${this.$baseurl}/coin4_project/users/exchange_history`, {
-      //     params: {
-      //       limit: 100,
-      //       offset: 0
-      //       // access_token: token
-      //     }
-      //   })
-      //   .then(res => {
-      //     // console.log(res.data);
-      //     if (res.data.status == "success") {
-      //       this.exchangedata = res.data.records;
-      //       // console.log(res.data.records)
-      //     }
-      //   })
-      //   .catch(err => {
-      //     //console.log(err); //错误信息
-      //   });
+    // this.$axios
+    //   .get(`${this.$baseurl}/coin4_project/users/exchange_history`, {
+    //     params: {
+    //       limit: 100,
+    //       offset: 0
+    //       // access_token: token
+    //     }
+    //   })
+    //   .then(res => {
+    //     // console.log(res.data);
+    //     if (res.data.status == "success") {
+    //       this.exchangedata = res.data.records;
+    //       // console.log(res.data.records)
+    //     }
+    //   })
+    //   .catch(err => {
+    //     //console.log(err); //错误信息
+    //   });
   },
   methods: {
     //tap切换
@@ -130,11 +130,10 @@ export default {
       height: 50px;
       width: 1200px;
       margin-top: 50px;
-      color: #ffffff;
+      color: #aaaaaa;
       font-size: 20px;
       p {
         float: left;
-        // display: inline;
         line-height: 50px;
         font-size: 18px;
         padding-left: 19px;
