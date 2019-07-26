@@ -9,23 +9,24 @@ import store from './store/store'
 Vue.config.productionTip = false
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
+import top_right from "@/components/pc/top_right"
+Vue.component("topright", top_right);
 Vue.use(ElementUI);
-
+import global from '@/components/pc/global.js'
 Vue.prototype.$goto = function goto(name, id) {
   // 路由传参
+  // console.log(name, id);
   let obj = {
     name
   };
   // console.log(obj)
   if (id) {
     obj.params = {
-      id
+        idx:id
     };
-  }
+  } 
   this.$router.push(obj);
 }
-
 
 //让ajax携带cookie
 axios.defaults.withCredentials = true;
@@ -36,6 +37,7 @@ var baseurl = {
   //  api: "http://192.168.1.37:8080",
 }
 Vue.prototype.$baseurl = baseurl.api
+Vue.prototype.$global = global
 
 // console.log(window.location.href);
 //   if (isMobile() && window.location.href=="http://localhost:8080/#/") {
@@ -48,6 +50,10 @@ function isMobile() {
   return flag;
 }
 
+router.beforeEach((to, from, next) => {
+  store.commit('toprightt', to.name)
+  next();
+})
 
 /* eslint-disable no-new */
 new Vue({

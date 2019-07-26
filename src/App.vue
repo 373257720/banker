@@ -2,19 +2,19 @@
   <div id="app">
     <div id="top">
       <div class="top con">
-        <div class="top_left fl">BANK投资银行</div>
-        <div class="top_right fr">
-          <el-dropdown @command="handleCommand" trigger="click">
+        <div class="top_left">BANK投资银行</div>
+        <div class="boxx">
+          <el-dropdown @command="handleCommand" trigger="click" class="language">
             <span class="el-dropdown-link">
-              {{this.$store.state.currentUser}}
+              language
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="userpass" icon="el-icon-s-custom">个人审核</el-dropdown-item>
-              <el-dropdown-item command="mysign" icon="el-icon-edit-outline">签约项目</el-dropdown-item>
-              <el-dropdown-item command="login" icon="el-icon-back">退出登录</el-dropdown-item>
+              <el-dropdown-item command="en_US">ENGLISH</el-dropdown-item>
+              <el-dropdown-item command="zh_CN">中文</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+          <topright v-if="this.$store.state.topright"></topright>
         </div>
       </div>
     </div>
@@ -42,8 +42,8 @@ export default {
   name: "App",
   data() {
     return {
-      change: true,
-      active: 0
+      // change: true,
+      // active: 0
     };
   },
   created() {
@@ -56,19 +56,31 @@ export default {
       this.$store.commit("userStatus", sessionStorage.getItem("userName"));
     }
   },
-  mounted() {
-   
-  },
-  methods: { 
+  // mounted() {},
+  methods: {
     handleCommand(command) {
-      // console.log(command)
-      if (command == "userpass") {
-        this.$goto("userpass");
-      } else if (command == "mysign") {
-        this.$goto("mysign");
-      } else if (command == "login") {
-        this.$goto("login");
-      }
+      this.$axios({
+        method: "get",
+        url: `${this.$baseurl}/bsl_web/base/language.do?lan=${command}`,
+        transformRequest: [
+          function(data) {
+            let ret = "";
+            for (let it in data) {
+              ret +=
+                encodeURIComponent(it) +
+                "=" +
+                encodeURIComponent(data[it]) +
+                "&";
+            }
+            return ret;
+          }
+        ],
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }).then(res => {
+        console.log(res);
+      });
     }
   }
 };
@@ -81,31 +93,27 @@ button {
   background: #eeeeee;
   width: 100%;
   height: 60px;
-}
-.top {
-  height: 60px;
-  line-height: 60px;
-  .top_left {
-    color: #788ca5;
-    font-size: 18px;
-    font-weight: 700;
+  .top {
+    height: 60px;
+    display: flex;
+    line-height: 60px;
+    justify-content: space-between;
+    .boxx {
+      display: flex;
+      // width: 200px;
+    }
+    .top_left {
+      color: #788ca5;
+      font-size: 18px;
+      width: 200px;
+      font-weight: 700;
+    }
+    .language {
+      height: 60px;
+      margin-right:50px;
+    }
   }
-  .top_right {
-    color: #788ca5;
-    font-size: 18px;
-    font-weight: 700;
-  }
 }
-// #app {
-//   height: 100%;
-//   display: flex;
-//   flex-direction: column;
-// }
-// #top {
-//   background: #eeeeee;
-//   width: 100%;
-//   height: 60px;
-// }
 #bottom {
   width: 100%;
   height: 150px;

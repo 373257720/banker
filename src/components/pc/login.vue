@@ -61,6 +61,8 @@ export default {
           }
         }).then(res => {
           var rescode = res.data.resultCode;
+          sessionStorage.setItem("usertype", res.data.data.userType);
+          console.log(global);
           if (rescode == 10000) {
             console.log("登陆成功");
             this.$store.dispatch("setUser", this.username);
@@ -78,6 +80,12 @@ export default {
       }
     }
   }
+  // beforeRouteEnter: (to, from, next) => {
+  //   //  alert("hello" + this.name)
+  //   console.log(this);
+  //   // this.$store.commit('toprightt');
+  //   next();
+  // }
 };
 </script>
 <style lang='scss'>

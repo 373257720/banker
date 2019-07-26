@@ -1,24 +1,64 @@
 <template>
   <div id="mysign">
     <div class="mysign con">
-      <nav>我的簽約項目</nav>
+      <nav>我的签约项目</nav>
       <ul>
-        <li @click="$goto('goods_details')">
-          <p>項目名稱：的馮紹峰地方水電費</p>
-          <section>計劃時間</section>
-        </li>
-        <li></li>
-        <li class="blue">
-          <p>項目名稱：的馮紹峰地方水電費</p>
-          <section>計劃時間</section>
+        <li
+          v-for="item in fillter.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
+          :key="item.projectName"
+          @click="$goto('goods_details')"
+        >
+          <p>项目名称:{{item.projectName}}</p>
+          <section>计划時間:{{item.projectStartTime}}</section>
         </li>
       </ul>
+      <div class="page" v-if="fillter.length>0">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          :page-size="pagesize"
+          layout="total,prev, pager, next, jumper"
+          :total="fillter.length"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "mysign"
+  name: "mysign",
+  data() {
+    return {
+      currentPage: 1,
+      pagesize: 6,
+      fillter: []
+    };
+  },
+  created() {
+    this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/projectSign/project`,
+      params: {
+        projectStatus: 2,
+        pageIndex: this.currentPage,
+        pageSize: this.pagesize
+      }
+    }).then(res => {
+      this.fillter = [...res.data.data.lists];  
+      this.fillter.forEach((item)=>{
+         item.projectStartTime= this.$global.timestampToTime(item.projectStartTime) 
+      })   
+    });
+  },
+  methods: {
+   
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.currentPag = val;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -51,6 +91,9 @@ export default {
         background: #00adef;
         color: white;
       }
+    }
+    .page {
+      text-align: center;
     }
   }
 }

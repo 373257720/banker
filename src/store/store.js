@@ -4,6 +4,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentUser: null,
+    topright:true,
   },
   getters: {
   },
@@ -19,7 +20,15 @@ export default new Vuex.Store({
           state.currentUser = null;
           //  state.isLogin = false;
         }
-      }
+      },
+      toprightt(state,user){
+        if(user=='login' ||user=='register'){
+          state.topright=false;
+        }else{
+          state.topright=true;
+        }
+         
+      },
   },
   actions: {
     setUser(context, user) {

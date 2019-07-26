@@ -2,7 +2,7 @@
   <div id="project_intro">
     <div class="project_intro con" v-if="success">
       <nav>項目簡介</nav>
-      <main id="project_intro_length" >
+      <main id="project_intro_length">
         <aside>
           <!-- <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt /> -->
         </aside>
@@ -10,7 +10,7 @@
       </main>
       <footer>
         <button @click="$goto('home')">再考慮一下</button>
-        <button @click='goto'>簽約</button>
+        <button @click="goto">簽約</button>
       </footer>
     </div>
     <div class="project_intro2 con" v-if="!success">
@@ -27,23 +27,39 @@ export default {
   data() {
     return {
       success: true,
-      time:3
+      time: 3,
+      routeidx: null
       // project_intro_length: ""
       // A:this.$refs.article.offsetHeight
       // project_intro_length: document.getElementById("article").offsetHeight
     };
   },
-  methods:{
-      goto() {
-      this.success = !this.success;
-      var aa = setInterval(() => {
-        --this.time;
-      }, 1000);
-      setTimeout(() => {
-        clearInterval(aa);
-        this.$goto("home");
-      }, 4000);
+  methods: {
+    goto() {
+      this.$axios({
+        method: "get",
+        url: `${this.$baseurl}/bsl_web/projectSign/sign?projectId=${this.routeidx}`
+      }).then(res => {
+        console.log(res);
+      });
+      // this.success = !this.success;
+      // var aa = setInterval(() => {
+      //   --this.time;
+      // }, 1000);
+      // setTimeout(() => {
+      //   clearInterval(aa);
+      //   this.$goto("home");
+      // }, 4000);
     }
+  },
+  created() {
+    this.routeidx = this.$route.params.idx;
+    this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/project/getProjectDetails?projectId=${this.routeidx}`
+    }).then(res => {
+      console.log(res);
+    });
   },
   mounted() {
     // document.getElementById("project_intro").offsetHeight += document.getElementById(
@@ -59,20 +75,17 @@ export default {
     //   document.getElementsByClassName("project_intro")[0].style.height =
     //     1000 + "px";
     // }
-
     // console.log(a, b);
-
     // document.getElementById("project_intro").offsetHeight+=document.getElementById("project_intro_length").offsetHeight;
   }
 };
 </script>
 <style lang="scss" scoped>
 #project_intro {
-  
   width: 100%;
   .project_intro2 {
     width: 553px;
-     height: 850px;
+    height: 850px;
     text-align: center;
     nav {
       img {

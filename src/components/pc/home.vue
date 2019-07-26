@@ -7,7 +7,12 @@
       <div class="project">
         <h2>所有项目</h2>
         <el-input v-model="search" placeholder="请输入内容">
-          <i slot="suffix" class="el-icon-search"></i>
+          <i
+            slot="suffix"
+            class="el-icon-search"
+            @click="prolists(currentPage, pagesize, search)"
+            style="cursor: pointer;"
+          ></i>
         </el-input>
       </div>
       <article>
@@ -15,15 +20,20 @@
           <ul>
             <li
               v-for="item in fillter.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
-              :key="item"
+              :key="item.id"
             >
               <div class="project_content_top">
-                <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt />
+                <img
+                  :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`"
+                  :class="{'active':item.projectStatus==2}"
+                  alt
+                />
+                <span v-if="item">{{item.projectStatus==2?'已签约':''}}</span>
               </div>
               <div class="project_content_bottom">
-                <p>项目名称:到辅导费水电费的说法水电费水电费等房东房东房东房东分随碟附送的</p>
-                <p>计划时间:423423423423</p>
-                <button @click="$goto('project_intro',item)">签约</button>
+                <p>项目名称:{{item.projectName}}</p>
+                <p>计划时间:{{item.projectStartTime}}</p>
+                <button @click="$goto('project_intro',item.projectId)">签约</button>
               </div>
             </li>
           </ul>
@@ -34,7 +44,7 @@
             :current-page.sync="currentPage"
             :page-size="pagesize"
             layout="total,prev, pager, next, jumper"
-            :total="8"
+            :total="this.fillter.length"
           ></el-pagination>
         </div>
       </article>
@@ -50,10 +60,57 @@ export default {
       search: "",
       currentPage: 1,
       pagesize: 6,
-      fillter: [1, 2, 3, 4, 5, 6, , 1]
+      fillter: []
     };
   },
+  created() {
+    console.log(111);
+    
+    this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/project/getAllProject`,
+      params: {
+        searchKey: this.search,
+        pageIndex: this.currentPage,
+        pageSize: this.pagesize
+      },
+      transformRequest: [
+        function(data) {
+          let ret = "";
+          for (let it in data) {
+            ret +=
+              encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
+          }
+          return ret;
+        }
+      ],
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }).then(res => {
+      console.log(res.data.data.lists);
+      this.fillter = [...res.data.data.lists];
+      // console.log(fillter);
+    });
+  },
   methods: {
+    prolists(currentPage, pagesize, searchkey) {
+      console.log(currentPage, pagesize, searchkey);
+      this.$axios({
+        method: "get",
+        url: `${this.$baseurl}/bsl_web/project/getAllProject`,
+        params: {
+          searchKey: searchkey,
+          pageIndex: currentPage,
+          pageSize: pagesize
+        }
+      }).then(res => {
+        // console.log(res.data.data.lists);
+        this.fillter = [...res.data.data.lists];
+
+        // console.log(fillter);
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -87,12 +144,11 @@ export default {
     height: 1100px;
     .pro_pic {
       height: 120px;
-      overflow:hidden;
-      
-      img{
-          // vertical-align:bottom;
-          width: 1200px;
+      overflow: hidden;
 
+      img {
+        // vertical-align:bottom;
+        width: 1200px;
       }
     }
     article {
@@ -136,10 +192,22 @@ export default {
       width: 250px;
       height: 200px;
       margin-bottom: 10px;
+      position: relative;
+      span {
+        position: absolute;
+        top: 10px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: white;
+      }
       img {
         width: 250px;
         height: 200px;
         border-radius: 3%;
+      }
+      .active {
+        opacity: 0.5;
       }
     }
     .project_content_bottom {

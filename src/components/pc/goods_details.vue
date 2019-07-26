@@ -5,11 +5,11 @@
       <nav>
         <p>
           項目名稱:
-          <span>sdfsdfdsfsdf</span>
+          <span>{{proname}}</span>
         </p>
         <p>
           計劃時間:
-          <span>fsdfsdfds</span>
+          <span>{{protime}}</span>
         </p>
       </nav>
       <main>
@@ -34,6 +34,10 @@ export default {
   name: "goods_details",
   data() {
     return {
+      routeidx: "",
+      proname:'',
+      protime:'',
+      //  details_lists:[],
       details_lists: [
         {
           name: "公司名称:",
@@ -65,13 +69,36 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    this.routeidx = this.$route.params.idx;
+    this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}`
+    }).then(res => {
+      console.log(res.data);
+      this.proname=res.data.data.projectName;
+      this.protime=this.$global.timestampToTime(res.data.data.projectStartTime)
+      this.details_lists[0].content = res.data.data.projectCompany;
+      this.details_lists[1].content = res.data.data.publicCompany;
+       this.details_lists[2].content=res.data.data.projectDescribe;
+       this.details_lists[3].content=res.data.data.collectMoney;
+       this.details_lists[4].content=res.data.data.projectMobile;
+       this.details_lists[5].content=res.data.data.projectEmail;  
+       if(res.data.data.bslNameList.length>0){
+         this.details_lists[6].content=res.data.data.bslNameList
+       }else{
+         this.details_lists.pop()
+       }
+
+    });
   }
 };
 </script>
 <style lang="scss" scoped>
 #goods_details {
   width: 100%;
-  margin:30px 0;
+  margin: 30px 0;
   // height: 870px;
   .goods_details {
     // height: 870px;
@@ -117,7 +144,7 @@ export default {
       aside {
         width: 320px;
         height: 400px;
-         border-radius: 5px;
+        border-radius: 5px;
         // background: red;
         border: 1px solid #ababab;
       }
@@ -129,7 +156,7 @@ export default {
       text-align: center;
       line-height: 40px;
       color: white;
-      border-radius: 2px;   
+      border-radius: 2px;
       margin: 0 auto;
     }
   }

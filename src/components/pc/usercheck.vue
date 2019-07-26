@@ -2,14 +2,14 @@
   <div id="usercheck">
     <div class="usercheck con">
       <h2>审核</h2>
-       <div class="nationality">
+      <div class="nationality">
         <p>类型</p>
-        <el-select v-model="value" filterable placeholder="请选择">
+        <el-select v-model="valuename" filterable placeholder="请选择">
           <el-option
-            v-for="(item,idx) in countrydata"
-            :key="item.countryCode"
-            :label="item.countryTcname"
-            :value="idx"
+            v-for="(item) in usertype"
+            :key="item.label"
+            :label="item.label"
+            :value="item.label"
           ></el-option>
         </el-select>
       </div>
@@ -116,6 +116,7 @@ export default {
     return {
       // success: true,
       value: "", //国家名字
+      valuename: "",
       idnum: "",
       idType: "",
       dialogVisible: false,
@@ -126,7 +127,17 @@ export default {
       identityPicTwo: "",
       companyname: "",
       CompanynameEn: "",
-      CompanyPic: ""
+      CompanyPic: "",
+      usertype: [
+        {
+          value: "0",
+          label: "项目方"
+        },
+        {
+          value: "01",
+          label: "中介"
+        }
+      ]
     };
   },
   computed: {
@@ -176,14 +187,14 @@ export default {
     }
   },
   methods: {
-    onsuccess(res,fild,index){
-        console.log(index);
-        
+    onsuccess(res, fild, index) {
+      console.log(index);
     },
     commit() {
       var num = this.countrydata[this.value].countrySort;
-      var userCountryEn=this.countrydata[this.value].countryEnname
-      var  userCountryCh=this.countrydata[this.value].countryZhname
+      var user_type;
+      var userCountryEn = this.countrydata[this.value].countryEnname;
+      var userCountryCh = this.countrydata[this.value].countryZhname;
       if (this.countrydata[this.value]) {
         if (num == 0 || num == 1 || num == 2) {
           this.idType = 1;
@@ -191,37 +202,45 @@ export default {
           this.idType = 2;
         }
       }
-     var data1= {
-          userCountry: this.countrydata[this.value].countryCode,
-          userCountryEn:userCountryEn,
-          userCountryCh:userCountryCh,
-          userIdentity: this.idnum,
-          identityType: this.idType,
-          identityPicOne:this.identityPicOne,
-          identityPicTwo:this.identityPicTwo,
-          userCompanyCh:this.companyname,
-          userCompanyEn:this. CompanynameEn,
-          userCompanyPic:this.CompanyPic
-        }
+      if (this.valuename == "项目方") {
+        user_type = 1;
+      } else if (this.valuename == "中介") {
+        user_type = 4;
+      }
+      var data1 = {
+        userType: user_type,
+        userCountry: this.countrydata[this.value].countryCode,
+        userCountryEn: userCountryEn,
+        userCountryCh: userCountryCh,
+        userIdentity: this.idnum,
+        identityType: this.idType,
+        identityPicOne: this.identityPicOne,
+        identityPicTwo: this.identityPicTwo,
+        userCompanyCh: this.companyname,
+        userCompanyEn: this.CompanynameEn,
+        userCompanyPic: this.CompanyPic
+      };
+      console.log(data1);
+      
       this.$axios({
         method: "post",
         url: `${this.$baseurl}/bsl_web/user/submitAuth`,
         data: data1,
-           transformRequest: [
-            function(data) {
-              let ret = "";
-              for (let it in data) {
-                ret +=
-                  encodeURIComponent(it) +
-                  "=" +
-                  encodeURIComponent(data[it]) +
-                  "&";
-              }
-              return ret;
+        transformRequest: [
+          function(data) {
+            let ret = "";
+            for (let it in data) {
+              ret +=
+                encodeURIComponent(it) +
+                "=" +
+                encodeURIComponent(data[it]) +
+                "&";
             }
-          ],
+            return ret;
+          }
+        ],
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+          "Content-Type": "application/x-www-form-urlencoded"
         }
       })
         .then(res => {
@@ -301,7 +320,7 @@ export default {
     },
     // 自定义上传
     // 文件上传
-    uploadFile(params,index) {
+    uploadFile(params, index) {
       // console.log(params,index);
       const _file = params.file;
       // const isLt2M = _file.size / 1024 / 1024 < 2;
@@ -316,14 +335,16 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       })
-        .then(res => {
-         var imgurl= res.data.data.url;
-          if(index==1){
-           this.identityPicOne=imgurl
-          }else if(index==2){
-             this.identityPicTwo=imgurl
-          }else if(index==3){
-              this.CompanyPic=imgurl
+        .then(res => {      
+          var imgurl =res.data.data.url;
+          // console.log(imgurl);
+          
+          if (index == 1) {
+            this.identityPicOne = imgurl;
+          } else if (index == 2) {
+            this.identityPicTwo = imgurl;
+          } else if (index == 3) {
+            this.CompanyPic = imgurl;
           }
         })
         .catch(err => {
