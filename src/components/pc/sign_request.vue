@@ -7,11 +7,11 @@
         <ul>
           <li>
             <span>项目名称:</span>
-            <span>4564564564564564564564</span>
+            <span>{{array.projectName}}</span>
           </li>
           <li>
             <span>项目时间:</span>
-            <span>4564564564564564564564</span>
+            <span>{{starttime}}</span>
           </li>
           <li>
             <span>申请中间人:</span>
@@ -24,19 +24,21 @@
         </ul>
       </header>
       <main>
-        <pre>
-    一.最近的中国新说唱亲爱的,热爱的还有向往的生活534534534534534534534都可以用会员免广告啦 sdfsdfsd sdf sdf 
-    二.最近的中国新说唱亲爱的,热爱的还有向往的生活都可以用会员免广告啦
-    三.最近的中国新说唱亲爱的,热爱的还有向往的生活都可以用会员免广告啦dsfdsffffffffffffffffffffffffffffffffffffff
-        </pre>
+        <article v-html="array.projectDescribe">{{array.projectDescribe}}</article>
         <p>条款:</p>
-        <pre>
-    一.最近的中国新说唱亲爱的,热爱的还有向往的生活534534534534534534534都可以用会员免广告啦 sdfsdfsd sdf sdf 
-    二.最近的中国新说唱亲爱的,热爱的还有向往的生活都可以用会员免广告啦
-    三.最近的中国新说唱亲爱的,热爱的还有向往的生活都可以用会员免广告啦
-      </pre>
+        <aside>
+          {{array.projectDetail}}
+        </aside>
       </main>
-      <section></section>
+      <section>
+        <p>请输入您需要增加的条款或细节：</p>
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 8}"
+          placeholder="请输入内容"
+          v-model="textarea"
+        ></el-input>
+      </section>
       <footer>
         <button>拒绝签约</button>
         <button>同意签约</button>
@@ -44,9 +46,42 @@
     </div>
   </div>
 </template>
-
+  
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      array: {},
+      routeidx: "",
+      textarea:"",
+      starttime:''
+    };
+  },
+  methods:{
+  },
+  created() {
+    // this.textarea.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+    if (this.$route.params.idx) {
+      this.routeidx = this.$route.params.idx;
+    } else {
+      this.routeidx = sessionStorage.getItem("projectid");
+    }
+    sessionStorage.setItem("projectid", this.routeidx);
+    this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}`
+    }).then(res => {
+      console.log(res.data.data);
+      this.array = { ...res.data.data };
+      for (var key in this.array) {
+        if ((key = "projectStartTime")) {
+          // console.log(this.array[key]);
+         this.starttime=  this.$global.timestampToTime(this.array[key])
+        }
+      }
+    });
+  }
+};
 </script>
 
 <style lang='scss' scoped>
@@ -121,16 +156,18 @@ export default {};
       p {
         margin: 30px 0 0 0;
       }
-      pre {
-        margin: 0;
-        font-size: 14px;
-        //  text-indent: 0px;
-      }
     }
-    // article {
-    //   height: 200px;
-    //   background: green;
-    // }
+    section {
+      p {
+        margin: 0 0 10px 0;
+      }
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: left;
+      font-size: 16px;
+      color: #575757;
+      line-height: 30px;
+    }
     footer {
       height: 100px;
       margin-top: 50px;

@@ -38,13 +38,11 @@
     </el-table>
     <el-pagination
       v-if="fillter.length>0"
-      :page-size="pagesize"
-      :pager-count="5"
-      layout="prev, pager, next"
       @current-change="handleCurrentChange"
       :current-page.sync="currpage"
-      @size-change="handleSizeChange"
-      :total="fillter.length"
+      :page-size="pagesize"
+      layout="total,prev, pager, next, jumper"
+      :total="this.fillter.length"
     ></el-pagination>
   </div>
 </template>
@@ -96,35 +94,37 @@ export default {
     //   ];
     // }
   },
- async created() {
-       function abc() {
-            let a = await this.$global.getdata(this.$baseurl,1,this.currpage.this.pagesize);
-            console.log(a);
-        }
-    abc();
-
+  created() {
+    // this.$global.changepage(this.$baseurl,1,this.currpage,this.pagesize,this.fillter)
     // console.log(this.$global.a);
+    this.changepage(1,this.currpage,this.pagesize)
 
-    // this.$axios({
-    //   method: "get",
-    //   url: `${this.$baseurl}/bsl_web/projectSign/project`,
-    //   params: {
-    //     projectStatus: 1,
-    //     pageIndex: this.currpage,
-    //     pageSize: this.pagesize
-    //   }
-    // }).then(res => {
-    //   this.fillter = [...res.data.data.lists];
-    //   this.fillter.forEach((item)=>{
-    //      item.projectStartTime= this.$global.timestampToTime(item.projectStartTime)
-    //      item.signTime=this.$global.timestampToTime(item.signTime)
-    //   })
-    // });
   },
   methods: {
+    changepage (num,currpage,pagesize){
+          this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/projectSign/project`,
+      params: {
+        projectStatus: num,
+        pageIndex: currpage,
+        pageSize: pagesize
+      }
+    }).then(res => {
+      this.fillter = [...res.data.data.lists];
+      this.fillter.forEach(item => {
+        item.projectStartTime = this.$global.timestampToTime(
+          item.projectStartTime
+        );
+        item.signTime = this.$global.timestampToTime(item.signTime);
+      });
+    });
+    },
+    handleEdit(idx,row){
+        // console.log(idx,row);
+        this.$goto('sign_request',row.projectId)
+    },
     handleCurrentChange(cpage) {
-      console.log(this.fillter);
-
       this.currpage = cpage;
     },
     handleSizeChange(psize) {

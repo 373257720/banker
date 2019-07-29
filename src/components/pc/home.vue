@@ -17,26 +17,26 @@
       </div>
       <article>
         <div class="project_content">
-          <ul>
+          <ul v-if="fillter.length>0">
             <li
               v-for="item in fillter.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
               :key="item.id"
             >
               <div class="project_content_top">
-                <img
-                  :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`"
-                  :class="{'active':item.projectStatus==2}"
-                  alt
-                />
-                <span v-if="item">{{item.projectStatus==2?'已签约':''}}</span>
+                <img :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`" alt />
+                <!-- :class="{'active':item.projectStatus==2}" -->
+                <p v-if="item">
+                  <span>{{item.projectStatus==2?'已签约':''}}</span>
+                </p>
               </div>
               <div class="project_content_bottom">
-                <p>项目名称:{{item.projectName}}</p>
-                <p>计划时间:{{item.projectStartTime}}</p>
+                <p>项目名称：{{item.projectName}}</p>
+                <p>计划时间：{{item.projectStartTime}}</p>
                 <button @click="$goto('project_intro',item.projectId)">签约</button>
               </div>
             </li>
           </ul>
+          <section v-if="fillter.length<=0">暂无记录</section>
         </div>
         <div class="page">
           <el-pagination
@@ -64,38 +64,10 @@ export default {
     };
   },
   created() {
-    console.log(111);
-    
-    this.$axios({
-      method: "get",
-      url: `${this.$baseurl}/bsl_web/project/getAllProject`,
-      params: {
-        searchKey: this.search,
-        pageIndex: this.currentPage,
-        pageSize: this.pagesize
-      },
-      transformRequest: [
-        function(data) {
-          let ret = "";
-          for (let it in data) {
-            ret +=
-              encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
-          }
-          return ret;
-        }
-      ],
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    }).then(res => {
-      console.log(res.data.data.lists);
-      this.fillter = [...res.data.data.lists];
-      // console.log(fillter);
-    });
+    this.prolists(this.currentPage, this.pagesize, this.search);
   },
   methods: {
     prolists(currentPage, pagesize, searchkey) {
-      console.log(currentPage, pagesize, searchkey);
       this.$axios({
         method: "get",
         url: `${this.$baseurl}/bsl_web/project/getAllProject`,
@@ -105,14 +77,20 @@ export default {
           pageSize: pagesize
         }
       }).then(res => {
-        // console.log(res.data.data.lists);
-        this.fillter = [...res.data.data.lists];
-
-        // console.log(fillter);
+        if (res.data.resultCode == 10090) {
+          this.$goto("login");
+        } else if (res.data.resultCode == 10000) {
+          this.fillter = [...res.data.data.lists];
+          this.fillter.forEach(item => {
+            item.projectStartTime = this.$global.timestampToTime(
+              item.projectStartTime
+            );
+          });
+        }
       });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.currentPag = val;
@@ -153,7 +131,7 @@ export default {
     }
     article {
       position: relative;
-      width: 780px;
+      width: 900px;
       height: 830px;
       margin: 0 auto;
       .page {
@@ -171,35 +149,55 @@ export default {
     justify-content: space-between;
     h2 {
       line-height: 40px;
-      font-size: 18px;
+      font-size: 22px;
+      // font-weight: 600;
     }
   }
   .project_content {
     // text-align: center;
-    width: 780px;
+    width: 900px;
     margin: 0 auto;
     ul {
-      width: 780px;
+      width: 900px;
       display: flex;
       flex-wrap: wrap;
       li {
         width: 250px;
-        margin-right: 10px;
+        margin-right: 40px;
         margin-bottom: 50px;
       }
+    }
+    section {
+      width: 780px;
+      font-size: 20px;
+      text-align: center;
+      padding-top: 100px;
     }
     .project_content_top {
       width: 250px;
       height: 200px;
       margin-bottom: 10px;
+      border: 1px solid #ababab;
+      border-radius: 3%;
+      box-sizing: border-box;
+      overflow: hidden;
       position: relative;
-      span {
+      p {
         position: absolute;
-        top: 10px;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background: white;
+        top: 0px;
+        right: 5%;
+        display: flex;
+        justify-content: center;
+        height: 100px;
+        width: 50px;
+        background: url(../../assets/525758de00e12ddcfcc1bab0acb57d2.png)
+          no-repeat;
+        color: white;
+        span {
+          display: inline-block;
+          width: 16px;
+          font-size: 16px;
+        }
       }
       img {
         width: 250px;
@@ -213,8 +211,7 @@ export default {
     .project_content_bottom {
       border-radius: 3%;
       border: 1px solid #ababab;
-      height: 140px;
-
+      height: 120px;
       position: relative;
       box-sizing: border-box;
       overflow: hidden;

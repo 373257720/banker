@@ -40,9 +40,9 @@
             list-type="picture-card"
             :http-request="function(params){return uploadFile(params,1)}"
             :on-preview="handlePictureCardPreview"
-            :on-remove="appear"
-            :on-error="appear"
-            :on-change="dispear"
+            :on-remove="(file, fileList)=>appear(file, fileList,'.idcard_left')"
+            :on-error="(file, fileList)=>appear(file, fileList,'.idcard_left')"
+            :on-change="(file, fileList)=>dispear(file, fileList,'.idcard_left')"
             :limit="1"
           >
             <i class="el-icon-plus"></i>
@@ -55,9 +55,9 @@
             list-type="picture-card"
             :http-request="function(params){return uploadFile(params,2)}"
             :on-preview="handlePictureCardPreview"
-            :on-remove="appear2"
-            :on-error="appear2"
-            :on-change="dispear2"
+            :on-remove="(file, fileList)=>appear(file, fileList,'.idcard_right')"
+            :on-error="(file, fileList)=>appear(file, fileList,'.idcard_right')"
+            :on-change="(file, fileList)=>dispear(file, fileList,'.idcard_right')"
             :limit="1"
           >
             <i class="el-icon-plus"></i>
@@ -71,9 +71,9 @@
           list-type="picture-card"
           :http-request="function(params){return uploadFile(params,1)}"
           :on-preview="handlePictureCardPreview"
-          :on-remove="appear3"
-          :on-error="appear3"
-          :on-change="dispear3"
+          :on-remove="(file, fileList)=>appear(file, fileList,'.idcard2')"
+          :on-error="(file, fileList)=>appear(file, fileList,'.idcard2')"
+          :on-change="(file, fileList)=>dispear(file, fileList,'.idcard2')"
           :limit="1"
         >
           <i class="el-icon-plus"></i>
@@ -94,9 +94,9 @@
           list-type="picture-card"
           :http-request="function(params){return uploadFile(params,3)}"
           :on-preview="handlePictureCardPreview"
-          :on-remove="appear4"
-          :on-error="appear4"
-          :on-change="dispear4"
+          :on-remove="(file, fileList)=>appear(file, fileList,'.companycheck')"
+          :on-error="(file, fileList)=>appear(file, fileList,'.companycheck')"
+          :on-change="(file, fileList)=>dispear(file, fileList,'.companycheck')"
           :limit="1"
         >
           <i class="el-icon-plus"></i>
@@ -104,7 +104,6 @@
       </div>
       <div class="commit">
         <button @click="commit">提交</button>
-        <!-- <button @click="$goto('login')">提交</button> -->
       </div>
     </div>
   </div>
@@ -151,7 +150,7 @@ export default {
   },
   created() {
     this.$axios
-      .get(`${this.$baseurl}/bsl_web/base/countryList`, {
+      .get(`${this.$baseurl}/bsl_web/base/countryList.do`, {
         transformRequest: [
           function(data) {
             let ret = "";
@@ -220,8 +219,6 @@ export default {
         userCompanyEn: this.CompanynameEn,
         userCompanyPic: this.CompanyPic
       };
-      console.log(data1);
-      
       this.$axios({
         method: "post",
         url: `${this.$baseurl}/bsl_web/user/submitAuth`,
@@ -244,20 +241,13 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
+          if (res.data.resultCode == 10000) {
+            this.$goto("login");
+          }
         })
         .catch(err => {
           console.log(err);
         });
-    },
-    choose(a) {
-      var b = document.querySelector(a);
-      b.style = "display:none;";
-    },
-    handleRemove(a, b) {
-      document.querySelector(a).style =
-        "position:absolute;bottom:0;display:block;";
-      document.querySelector(b).style = "display:none";
     },
     handleAvatarSuccess(res, file) {
       console.log(res, file);
@@ -276,42 +266,17 @@ export default {
       return isJPG && isLt2M;
     },
     //文件状态改变时的钩子，参数为上传的文件,把那个十字选择框去掉
-    dispear(file, fileList) {
-      this.choose(".idcard_left .el-upload--picture-card");
+    dispear(file, fileList, name) {
+      var a = name + " .el-upload--picture-card";
+      var b = document.querySelector(a);
+      b.style = "display:none;";
     },
-    dispear2(file, fileList) {
-      this.choose(".idcard_right .el-upload--picture-card");
-    },
-    dispear3(file, fileList) {
-      this.choose(".idcard2 .el-upload--picture-card");
-    },
-    dispear4(file, fileList) {
-      this.choose(".companycheck .el-upload--picture-card");
-    },
-    //文件列表移除文件时的钩子
-    appear() {
-      this.handleRemove(
-        ".idcard_left .el-upload--picture-card",
-        ".idcard_left .el-upload-list__item"
-      );
-    },
-    appear2() {
-      this.handleRemove(
-        ".idcard_right .el-upload--picture-card",
-        ".idcard_right .el-upload-list__item"
-      );
-    },
-    appear3() {
-      this.handleRemove(
-        ".idcard2 .el-upload--picture-card",
-        ".idcard2 .el-upload-list__item"
-      );
-    },
-    appear4() {
-      this.handleRemove(
-        ".companycheck .el-upload--picture-card",
-        ".companycheck .el-upload-list__item"
-      );
+    appear(file, fileList, name) {
+      var a = name + " .el-upload--picture-card";
+      var b = name + " .el-upload-list__item";
+      document.querySelector(a).style =
+        "position:absolute;bottom:0;display:block;";
+      document.querySelector(b).style = "display:none";
     },
     //点击文件列表中已上传的文件时的钩子,图片放大镜
     handlePictureCardPreview(file) {
@@ -335,10 +300,8 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       })
-        .then(res => {      
-          var imgurl =res.data.data.url;
-          // console.log(imgurl);
-          
+        .then(res => {
+          var imgurl = res.data.data.url;
           if (index == 1) {
             this.identityPicOne = imgurl;
           } else if (index == 2) {

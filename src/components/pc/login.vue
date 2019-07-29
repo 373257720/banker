@@ -9,16 +9,18 @@
           </div>
           <el-input placeholder="请输入密码" v-model="password" show-password clearable></el-input>
           <section>
-            <!-- <p>账号或密码错误，请重新输入</p> -->
-            <span>忘记密码？</span>
+            <p>{{remind}}</p>
+            <!-- <span>忘记密码？</span> -->
           </section>
           <button @click="login">登 录</button>
         </div>
         <div class="main_right fr">
           <h2>您是新用戶吗？</h2>
           <button @click="$goto('register')">注册新账号</button>
-          <p>每天都有多款新项目上线，在线更新，随你选择签约</p>
-          <p>當你选择签约后，系统會会自动发送邮件給您确认</p>
+          <p>
+            <img src="../../assets/50286658b24e90531c4dd7dcbe5602c.png" alt />每天都有多款新项目上线，在线更新，随你选择签约
+          </p>
+          <p> <img src="../../assets/50286658b24e90531c4dd7dcbe5602c.png" alt="">當你选择签约后，系统會会自动发送邮件給您确认</p>
         </div>
       </div>
     </div>
@@ -30,11 +32,13 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      remind: ""
     };
   },
   methods: {
     login() {
+      this.remind = "";
       if (this.username && this.password) {
         this.$axios({
           method: "post",
@@ -66,7 +70,11 @@ export default {
           if (rescode == 10000) {
             console.log("登陆成功");
             this.$store.dispatch("setUser", this.username);
-            this.$goto("home");
+            if (res.data.data.isAuth == 1) {
+              this.$goto("home");
+            } else if (res.data.data.isAuth == 0) {
+              this.$goto("usercheck");
+            }
           } else if (rescode == 10011) {
             console.log("登录账号不能为空");
           } else if (rescode == 10012) {
@@ -145,7 +153,7 @@ export default {
       background: #00adef;
       width: 470px;
       height: 40px;
-      margin-top: 60px;
+      margin-top: 30px;
       font-size: 18px;
       color: white;
       font-weight: 700;
@@ -155,7 +163,13 @@ export default {
   .main_right {
     height: 400px;
     width: 467px;
+    line-height: 30px;
     // background: red;
+    p{
+      img{
+        margin-right:10px;
+      }
+    }
     button {
       width: 468px;
       height: 40px;

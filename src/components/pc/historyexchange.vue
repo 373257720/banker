@@ -36,14 +36,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination v-if="fillter.length>0"
-      :page-size="pagesize"
-      :pager-count="5"
-      layout="prev, pager, next"
+    <el-pagination
+      v-if="fillter.length>0"
       @current-change="handleCurrentChange"
       :current-page.sync="currpage"
-      @size-change="handleSizeChange"
-      :total="fillter.length"
+      :page-size="pagesize"
+      layout="total,prev, pager, next, jumper"
+      :total="this.fillter.length"
     ></el-pagination>
   </div>
 

@@ -43,12 +43,12 @@ Vue.prototype.$global = global
 //   if (isMobile() && window.location.href=="http://localhost:8080/#/") {
 //     window.location.href="http://www.baidu.com"
 //   }
-function isMobile() {
-  let flag = navigator.userAgent.match(
-    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
-  );
-  return flag;
-}
+// function isMobile() {
+//   let flag = navigator.userAgent.match(
+//     /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+//   );
+//   return flag;
+// }
 
 router.beforeEach((to, from, next) => {
   store.commit('toprightt', to.name)

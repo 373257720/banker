@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'vue'
 const global = {
   timestampToTime: function (timestamp) {
     var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为1
@@ -10,41 +11,8 @@ const global = {
     var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
     return Y + M + D + h + m + s;
   },
-
-  // changepage: async function (url, num, currpage, pagesize) {
-  //   var arr = [];
-  //   return new Promise((resolve, reject) =>{
-
-  //   }
-  //    axios({
-  //     method: "get",
-  //     url: `${url}/bsl_web/projectSign/project`,
-  //     params: {
-  //       projectStatus: num,
-  //       pageIndex: currpage,
-  //       pageSize: pagesize
-  //     }
-  //   }).then(res => {
-  //     arr = [...res.data.data.lists];
-  //     arr.forEach((item) => {
-  //       item.projectStartTime = this.timestampToTime(item.projectStartTime)
-  //       item.signTime = this.timestampToTime(item.signTime)
-  //     })    
-  //   })
-  // },
-
-  getdata: function (url, num, currpage, pagesize) {
-    axios.interceptors.response.use(function (res) {
-      let arr = [];
-      arr = [...res.data.data.lists];
-      arr.forEach((item) => {
-        item.projectStartTime = global.timestampToTime(item.projectStartTime)
-        item.signTime = global.timestampToTime(item.signTime)
-      })
-      res.data = arr;
-      return res;
-    })
-    return axios({
+  changepage: async function (url, num, currpage, pagesize,arr) {
+     axios({
       method: "get",
       url: `${url}/bsl_web/projectSign/project`,
       params: {
@@ -52,8 +20,24 @@ const global = {
         pageIndex: currpage,
         pageSize: pagesize
       }
-    });
+    }).then(res => {
+      
+      arr = [...res.data.data.lists];
+      arr.forEach((item,idx) => {
+        item.projectStartTime = this.timestampToTime(item.projectStartTime)
+        item.signTime = this.timestampToTime(item.signTime)
+        arr = Vue.set(arr,idx,item)
+        console.log(arr)
+      })    
+    })
   },
+  cleanall(){
+    this.$goto("login");
+    sessionStorage.clear();
+    
+  }
+
+
   // abc:async function(url, num, currpage, pagesize){
   //   let a = await this.getdata(url, num, currpage, pagesize);
   //   console.log(a);

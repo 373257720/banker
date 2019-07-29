@@ -15,14 +15,15 @@ export default new Vuex.Store({
           //    state.isLogin = true
         } else if (user == null) {
           //退出的时候清空sessionStorage里的东西
-          sessionStorage.setItem('userName', null);
+          // sessionStorage.clear();
+          // sessionStorage.setItem('userName', null);
           //  sessionStorage.setItem('userToke','');
           state.currentUser = null;
           //  state.isLogin = false;
         }
       },
       toprightt(state,user){
-        if(user=='login' ||user=='register'){
+        if(user=='login' ||user=='register'||user=='usercheck'){
           state.topright=false;
         }else{
           state.topright=true;

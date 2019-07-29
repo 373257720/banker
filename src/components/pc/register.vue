@@ -63,7 +63,6 @@ export default {
         }).then(res => {
           var rescode = res.data.resultCode;
           if (rescode == 10000) {
-            console.log("注册成功");
             this.success = !this.success;
             var aa = setInterval(() => {
               --this.timeout;
@@ -73,11 +72,12 @@ export default {
               this.$goto("usercheck");
             }, 4000);
           } else if (rescode == 10011) {
-            console.log("登录账号不能为空");
+            this.remind="登录账号不能为空"
           } else if (rescode == 10012) {
-            console.log("邮箱地址无效请重新输入");
+            this.remind="邮箱地址无效请重新输入"
           } else if ((rescode = 10014)) {
-            console.log("该邮箱已注册，请登录");
+            // this.remind="该邮箱已注册，请登录"
+             this.$goto("usercheck");
           }
         });
       } else {
@@ -95,10 +95,10 @@ export default {
       width: 470px;
     }
     .username .el-input--suffix {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     .password .el-input--suffix {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     .el-input__inner {
       background: #f6f6f6;
@@ -147,7 +147,7 @@ export default {
     background: #00adef;
     width: 470px;
     height: 40px;
-    margin-top: 60px;
+    margin-top: 40px;
     font-size: 18px;
     color: white;
     font-weight: 700;

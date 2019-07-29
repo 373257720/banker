@@ -2,11 +2,11 @@
   <div id="app">
     <div id="top">
       <div class="top con">
-        <div class="top_left">BANK投资银行</div>
+        <div class="top_left" @click="goto('home')">BANK投资银行</div>
         <div class="boxx">
           <el-dropdown @command="handleCommand" trigger="click" class="language">
             <span class="el-dropdown-link">
-              language
+              {{language}}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -42,6 +42,7 @@ export default {
   name: "App",
   data() {
     return {
+      language: "中文"
       // change: true,
       // active: 0
     };
@@ -55,9 +56,26 @@ export default {
     if (sessionStorage.getItem("userName")) {
       this.$store.commit("userStatus", sessionStorage.getItem("userName"));
     }
+    this.handleCommand('zh_CN');
   },
   // mounted() {},
   methods: {
+    goto(name,id) {
+      let obj = {
+        name
+      };
+      if (id) {
+        obj.params = {
+          idx: id
+        };
+      }
+      if(this.$store.state.currentUser){
+          this.$router.push(obj);
+      }else{
+        this.$router.push('login');
+      }
+
+    },
     handleCommand(command) {
       this.$axios({
         method: "get",
@@ -78,9 +96,15 @@ export default {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
-      }).then(res => {
-        console.log(res);
-      });
+      })
+        .then(res => {
+          if (command == "en_US") {
+            this.language = "ENGLISH";
+          } else if (command == "zh_CN") this.language = "中文";
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
@@ -105,12 +129,13 @@ button {
     .top_left {
       color: #788ca5;
       font-size: 18px;
+      cursor: pointer;
       width: 200px;
       font-weight: 700;
     }
     .language {
       height: 60px;
-      margin-right:50px;
+      margin-right: 50px;
     }
   }
 }

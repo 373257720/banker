@@ -1,14 +1,14 @@
 <template>
   <div id="goods_details">
     <div class="goods_details">
-      <header>項目詳情</header>
+      <header>项目详情</header>
       <nav>
         <p>
-          項目名稱:
+          项目名称:
           <span>{{proname}}</span>
         </p>
         <p>
-          計劃時間:
+          计划时间:
           <span>{{protime}}</span>
         </p>
       </nav>
@@ -25,7 +25,7 @@
           <img src alt />
         </aside>
       </main>
-      <footer>返回</footer>
+      <footer @click="$goto('mysign_pro')">返回</footer>
     </div>
   </div>
 </template>
@@ -35,8 +35,8 @@ export default {
   data() {
     return {
       routeidx: "",
-      proname:'',
-      protime:'',
+      proname: "",
+      protime: "",
       //  details_lists:[],
       details_lists: [
         {
@@ -71,26 +71,32 @@ export default {
     };
   },
   created() {
-    this.routeidx = this.$route.params.idx;
+    if(this.$route.params.idx){
+        this.routeidx = this.$route.params.idx;
+    }else{
+      this.routeidx=sessionStorage.getItem("projectid")
+    }
+     sessionStorage.setItem("projectid",this.routeidx);
     this.$axios({
       method: "get",
       url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}`
     }).then(res => {
-      console.log(res.data);
-      this.proname=res.data.data.projectName;
-      this.protime=this.$global.timestampToTime(res.data.data.projectStartTime)
+      this.proname = res.data.data.projectName;
+      this.protime = this.$global.timestampToTime(
+        res.data.data.projectStartTime
+      );
       this.details_lists[0].content = res.data.data.projectCompany;
-      this.details_lists[1].content = res.data.data.publicCompany;
-       this.details_lists[2].content=res.data.data.projectDescribe;
-       this.details_lists[3].content=res.data.data.collectMoney;
-       this.details_lists[4].content=res.data.data.projectMobile;
-       this.details_lists[5].content=res.data.data.projectEmail;  
-       if(res.data.data.bslNameList.length>0){
-         this.details_lists[6].content=res.data.data.bslNameList
-       }else{
-         this.details_lists.pop()
-       }
-
+      this.details_lists[1].content = res.data.data.publicCompany==false?'否':'是';
+      this.details_lists[2].content = res.data.data.projectDescribe;
+      this.details_lists[3].content = res.data.data.collectMoney;
+      this.details_lists[4].content = res.data.data.projectMobile;
+      this.details_lists[5].content = res.data.data.projectEmail;
+      if (res.data.data.bslNameList.length > 0) {
+        // console.log(res.data.data.bslNameList.join(","));  
+        this.details_lists[6].content = res.data.data.bslNameList.join(",");
+      } else {
+        this.details_lists.pop();
+      }
     });
   }
 };
@@ -129,7 +135,8 @@ export default {
         width: 320px;
         li {
           margin-bottom: 40px;
-
+          word-wrap: break-word;
+          word-break: normal;
           p:nth-of-type(1) {
             font-weight: 600;
             font-size: 16px;

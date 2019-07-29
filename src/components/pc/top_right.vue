@@ -29,8 +29,11 @@ export default {
         } else if (usertype == 4) {
           this.$goto("mysign");
         }
-      } else if (command == "login") {
+      } else if (command == "login") { 
+        sessionStorage.clear();
+        this.$store.commit("userStatus",null);
         this.$goto("login");
+
       }
     }
   }

@@ -15,7 +15,7 @@
     </div>
     <div class="project_intro2 con" v-if="!success">
       <nav>
-        <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt />
+        <img src="../../assets/19b9f427bcaefd8a3e879024299a204.png" alt />
         <span>您已注册成功{{time}}s</span>
       </nav>
     </div>
@@ -40,16 +40,17 @@ export default {
         method: "get",
         url: `${this.$baseurl}/bsl_web/projectSign/sign?projectId=${this.routeidx}`
       }).then(res => {
-        console.log(res);
+        if (res.data.resultCode == 10000) {
+          this.success = !this.success;
+          var aa = setInterval(() => {
+            --this.time;
+          }, 1000);
+          setTimeout(() => {
+            clearInterval(aa);
+            this.$goto("home");
+          }, 4000);
+        }
       });
-      // this.success = !this.success;
-      // var aa = setInterval(() => {
-      //   --this.time;
-      // }, 1000);
-      // setTimeout(() => {
-      //   clearInterval(aa);
-      //   this.$goto("home");
-      // }, 4000);
     }
   },
   created() {
@@ -85,7 +86,9 @@ export default {
   width: 100%;
   .project_intro2 {
     width: 553px;
-    height: 850px;
+    height: 760px;
+    padding-top:100px;
+    box-sizing: border-box;
     text-align: center;
     nav {
       img {
@@ -97,7 +100,6 @@ export default {
     }
   }
   .project_intro {
-    // height: 870px;
     margin: 0 auto;
     nav {
       font-size: 36px;
