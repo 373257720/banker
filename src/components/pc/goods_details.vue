@@ -22,7 +22,7 @@
           </ul>
         </article>
         <aside>
-          <img src alt />
+          <img :src="pic" alt />
         </aside>
       </main>
       <footer @click="$goto('mysign_pro')">返回</footer>
@@ -34,66 +34,65 @@ export default {
   name: "goods_details",
   data() {
     return {
+      pic: "",
       routeidx: "",
       proname: "",
       protime: "",
-      //  details_lists:[],
+      userid: "",
       details_lists: [
         {
           name: "公司名称:",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         },
         {
           name: "是否上市公司:",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         },
         {
           name: "项目介绍:",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         },
         {
           name: "集资金额:",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         },
         {
           name: "联系电话:",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         },
         {
           name: "电邮:",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         },
         {
           name: "签约方：",
-          content: "电饭锅快点肥家个价格考虑将改口费价格肯定发更健康"
+          content: ""
         }
       ]
     };
   },
   created() {
-    if(this.$route.params.idx){
-        this.routeidx = this.$route.params.idx;
-    }else{
-      this.routeidx=sessionStorage.getItem("projectid")
-    }
-     sessionStorage.setItem("projectid",this.routeidx);
+    // console.log(this.$route.query);
+    this.routeidx = this.$route.query.projectid;
+    this.userid = this.$route.query.userid;
     this.$axios({
       method: "get",
-      url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}`
+      url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}&signUserId=${this.userid}`
     }).then(res => {
       this.proname = res.data.data.projectName;
+      this.pic = "http://192.168.1.37:8080" + res.data.data.picList[0].projectPic;
       this.protime = this.$global.timestampToTime(
         res.data.data.projectStartTime
       );
       this.details_lists[0].content = res.data.data.projectCompany;
-      this.details_lists[1].content = res.data.data.publicCompany==false?'否':'是';
+      this.details_lists[1].content =
+        res.data.data.publicCompany == false ? "否" : "是";
       this.details_lists[2].content = res.data.data.projectDescribe;
       this.details_lists[3].content = res.data.data.collectMoney;
       this.details_lists[4].content = res.data.data.projectMobile;
       this.details_lists[5].content = res.data.data.projectEmail;
-      if (res.data.data.bslNameList.length > 0) {
-        // console.log(res.data.data.bslNameList.join(","));  
-        this.details_lists[6].content = res.data.data.bslNameList.join(",");
+      if (res.data.data.userCompanyCh) {
+        this.details_lists[6].content = res.data.data.userCompanyCh
       } else {
         this.details_lists.pop();
       }
@@ -105,9 +104,7 @@ export default {
 #goods_details {
   width: 100%;
   margin: 30px 0;
-  // height: 870px;
   .goods_details {
-    // height: 870px;
     width: 664px;
     margin: 0 auto;
     header {
@@ -152,8 +149,13 @@ export default {
         width: 320px;
         height: 400px;
         border-radius: 5px;
+        overflow:hidden;
         // background: red;
         border: 1px solid #ababab;
+        img{
+            width: 320px;
+        height: 400px;
+        }
       }
     }
     footer {

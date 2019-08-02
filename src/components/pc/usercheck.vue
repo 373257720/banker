@@ -1,6 +1,6 @@
 <template>
   <div id="usercheck">
-    <div class="usercheck con">
+    <div class="usercheck con" v-if="success1">
       <h2>审核</h2>
       <div class="nationality">
         <p>类型</p>
@@ -106,6 +106,12 @@
         <button @click="commit">提交</button>
       </div>
     </div>
+    <div class="usercheck2 con" v-if="!success1">
+      <nav>
+        <img src="../../assets/19b9f427bcaefd8a3e879024299a204.png" alt />
+        <span>您已提交成功{{timeout}}s</span>
+      </nav>
+    </div>
   </div>
 </template>
 <script>
@@ -113,7 +119,8 @@ export default {
   name: "usercheck",
   data() {
     return {
-      // success: true,
+      success1: true,
+      timeout: 3,
       value: "", //国家名字
       valuename: "",
       idnum: "",
@@ -242,7 +249,15 @@ export default {
       })
         .then(res => {
           if (res.data.resultCode == 10000) {
+            this.success1 = !this.success1;
+            var aa = setInterval(() => {
+              --this.timeout;
+            }, 1000);
+             setTimeout(() => {
+              clearInterval(aa);
             this.$goto("login");
+            }, 4000);
+            
           }
         })
         .catch(err => {
@@ -296,7 +311,7 @@ export default {
         method: "post",
         url: `${this.$baseurl}/bsl_web/upload/pic.do`,
         data: this.formData,
-        headers: {
+        headers: {  
           "Content-Type": "multipart/form-data"
         }
       })
@@ -313,10 +328,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
-      // if (!isLt2M) {
-      //   this.$message.error("请上传2M以下的.xlsx文件");
-      //   return false;
-      // }
     },
     // 确认上传
     submitUpload() {
@@ -383,7 +394,6 @@ export default {
   width: 100%;
   .usercheck {
     height: 1180px;
-    // overflow: hidden;
     h2 {
       text-align: center;
       padding: 38px 0 38px 0;
@@ -454,6 +464,20 @@ export default {
         // color:
       }
     }
+  }
+  .usercheck2{
+  height: 800px;
+  text-align: center;
+  padding-top:400px;
+  box-sizing: border-box;
+  nav {
+    img {
+      vertical-align: middle;
+    }
+    span {
+      vertical-align: middle;
+    }
+  }
   }
 }
 </style>

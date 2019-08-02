@@ -3,7 +3,9 @@
     <div class="sign_request">
       <h3>签约请求</h3>
       <header>
-        <aside></aside>
+        <aside>
+          <img :src="pic" alt />
+        </aside>
         <ul>
           <li>
             <span>项目名称:</span>
@@ -26,9 +28,7 @@
       <main>
         <article v-html="array.projectDescribe">{{array.projectDescribe}}</article>
         <p>条款:</p>
-        <aside>
-          {{array.projectDetail}}
-        </aside>
+        <aside>{{array.projectDetail}}</aside>
       </main>
       <section>
         <p>请输入您需要增加的条款或细节：</p>
@@ -40,8 +40,8 @@
         ></el-input>
       </section>
       <footer>
-        <button>拒绝签约</button>
-        <button>同意签约</button>
+        <button @click="pro_sign(userid,routeidx,3)">拒绝签约</button>
+        <button @click="pro_sign(userid,routeidx,2)">同意签约</button>
       </footer>
     </div>
   </div>
@@ -51,32 +51,66 @@
 export default {
   data() {
     return {
+      pic: "",
       array: {},
       routeidx: "",
-      textarea:"",
-      starttime:''
+      textarea: "",
+      starttime: "",
+      userid:''
     };
   },
-  methods:{
+  methods: {
+    
+    pro_sign(userid,projectid,num) {
+       var textarea=this.textarea.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+    // console.log(this.$route.query.projectId);
+      this.$axios({
+        method: "post",
+        url: `${this.$baseurl}/bsl_web/projectSign/projectProponenSign`,
+        data: {
+          signUserId: userid,
+          projectId: projectid,
+          signStatus: num,
+          projectArticle: textarea
+        },
+         transformRequest: [
+            function(data) {
+              let ret = "";
+              for (let it in data) {
+                ret +=
+                  encodeURIComponent(it) +
+                  "=" +
+                  encodeURIComponent(data[it]) +
+                  "&";
+              }
+              return ret;
+            }
+          ],
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+      }).then(res => {
+        // console.log(res.data.resultCode);
+        if(res.data.resultCode==10000){
+          
+        }
+      });
+    }
   },
   created() {
-    // this.textarea.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
-    if (this.$route.params.idx) {
-      this.routeidx = this.$route.params.idx;
-    } else {
-      this.routeidx = sessionStorage.getItem("projectid");
-    }
-    sessionStorage.setItem("projectid", this.routeidx);
+    this.routeidx = this.$route.query.projectid;
+    this.userid = this.$route.query.userid;
+    // sessionStorage.setItem("projectid", this.routeidx);
     this.$axios({
       method: "get",
       url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}`
     }).then(res => {
       console.log(res.data.data);
+      this.pic ="http://192.168.1.37:8080" + res.data.data.picList[0].projectPic;
       this.array = { ...res.data.data };
       for (var key in this.array) {
         if ((key = "projectStartTime")) {
-          // console.log(this.array[key]);
-         this.starttime=  this.$global.timestampToTime(this.array[key])
+          this.starttime = this.$global.timestampToTime(this.array[key]);
         }
       }
     });
@@ -106,10 +140,15 @@ export default {
       justify-content: space-between;
       aside {
         width: 250px;
+        overflow: hidden;
         border: 1px solid #ababab;
         border-radius: 3px;
         box-sizing: border-box;
         height: 250px;
+        img {
+          width: 250px;
+          height: 250px;
+        }
       }
       ul {
         width: 600px;

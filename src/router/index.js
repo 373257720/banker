@@ -10,6 +10,9 @@ import mysign from '@/components/pc/mysign'
 import mysign_pro from '@/components/pc/mysign_pro'
 import goods_details from '@/components/pc/goods_details'
 import userpass from '@/components/pc/userpass'
+import signrequest from '@/components/pc/signrequest'
+import signed_pro from '@/components/pc/signed_pro'
+import refuse_pro from '@/components/pc/refuselist'
 // moblie
 
 Vue.use(Router);
@@ -36,7 +39,7 @@ const routes = [{
     //   // keepAlive: true, // 需要被缓
     //   requireAuth: true
     // }
-  }, 
+  },
   {
     path: '/sign_request',
     name: 'sign_request',
@@ -46,6 +49,21 @@ const routes = [{
     path: '/project_intro',
     name: 'project_intro',
     component: project_intro,
+    // children: [{
+    //     path: 'signrequest',
+    //     name: 'signrequest',
+    //     component: signrequest,
+    //   }, {
+    //     path: 'signed_pro',
+    //     name: 'signed_pro',
+    //     component: signed_pro,
+    //   },
+    //   {
+    //     path: 'refuse_pro',
+    //     name: 'refuse_pro',
+    //     component: refuse_pro,
+    //   }
+    // ]
   },
   {
     path: '/userpass',

@@ -1,6 +1,6 @@
 <template>
   <div id="userpass">
-    <div class="userpass" >
+    <div class="userpass" v-if="status==1">
       <header>个人审核通过</header>
       <nav>
         <ul>
@@ -27,90 +27,78 @@
           <div class="idcard_left">
             <p>身份证正面</p>
             <div class="pic">
-              <img :src='idfront' alt="">
+              <img :src="idfront" alt />
             </div>
           </div>
           <div class="idcard_right">
             <p>身份证反面</p>
             <div class="pic">
-               <img :src='idback' alt="">
+              <img :src="idback" alt />
             </div>
           </div>
         </div>
-        <!-- <div class="idcard idcard2" v-if="success">
-          <p>passport</p>
-          <div class="pic"></div>
-        </div>-->
       </main>
       <section>
         <p>公司证书</p>
         <div class="com_pic">
-          <img :src='idback' alt="">
+          <img :src="idback" alt />
         </div>
       </section>
     </div>
-     <!-- <div class="userpass" v-else-if="result==0">
-      <header>个人审核中</header>
+    <div class="userpass common" v-else-if="status===0">
+      <header>您的资料已提交成功,请等待审核</header>
+      <section @click="$goto('home')">回到主页</section>
     </div>
-     <div class="userpass" v-else-if="result==2">
-      <header>个人审核不通过</header>
-    </div> -->
+    <div class="userpass common" v-else-if="status==2">
+      <header>很抱歉，您的资料审核不通过</header>
+      <section @click="$goto('usercheck')">再次申请</section>
+    </div>
   </div>
 </template>
 <script>
 export default {
   name: "userpass",
-  data(){
-    return{
-        result:null,
-        user_type:'',
-        nationlity:'',
-        idnum:'',
-        comname:'',
-        idfront:'',
-        idback:'',
-    }
+  data() {
+    return {
+      result: null,
+      user_type: "",
+      nationlity: "",
+      idnum: "",
+      comname: "",
+      idfront: "",
+      idback: "",
+      status: ""
+    };
   },
   created() {
-      this.$axios({
-        method: "get",
-        url: `${this.$baseurl}/bsl_web/user/getAuthDetails`
-        // transformRequest: [
-        //   function(data) {
-        //     let ret = "";
-        //     for (let it in data) {
-        //       ret +=
-        //         encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
-        //     }
-        //     return ret;
-        //   }
-        // ],
-        // headers: {
-        //   "Content-Type": "application/x-www-form-urlencoded"
-        // }
-      })
-      .then(res => {
-        console.log(res.data.data.optStatus);
-        this.result=res.data.data.optStatus
-        this.user_type=res.data.data.userType;
-        this.nationlity=res.data.data.userCountryCh;
-        this.idnum=res.data.data.userIdentity;
-        this.comname=res.data.data.userCompanyCh;
-        // console.log('http://192.168.1.37:8080'+res.data.data.identityPicOne);
-        this.idfront='http://192.168.1.37:8080'+res.data.data.identityPicOne
-        this.idback='http://192.168.1.37:8080'+res.data.data.identityPicOne
-      });
+    //审核状态0审核中，1，审核通过，2审核不通过
+    this.$axios({
+      method: "get",
+      url: `${this.$baseurl}/bsl_web/user/getAuthDetails`
+    }).then(res => {
+      this.status = res.data.data.optStatus;
+      if (res.data.data.optStatus == 2) {
+        this.user_type = res.data.data.userType;
+        this.nationlity = res.data.data.userCountryCh;
+        this.idnum = res.data.data.userIdentity;
+        this.comname = res.data.data.userCompanyCh;
+        this.idfront =
+          "http://192.168.1.37:8080" + res.data.data.identityPicOne;
+        this.idback = "http://192.168.1.37:8080" + res.data.data.identityPicOne;
+      }
+    });
   }
 };
 </script>
 <style lang='scss' scoped>
 #userpass {
-  height: 872px;
+  // height: 872px;
   width: 100%;
   .userpass {
     height: 872px;
     width: 680px;
     margin: 0 auto;
+    box-sizing: border-box;
     header {
       font-size: 24px;
       font-weight: 600;
@@ -139,7 +127,7 @@ export default {
         border: 1px solid #ababab;
         border-radius: 5px;
         background: #f6f6f6;
-        img{
+        img {
           width: 100%;
           height: 100%;
         }
@@ -154,11 +142,26 @@ export default {
         border-radius: 5px;
         background: #f6f6f6;
         border: 1px solid #ababab;
-        img{
+        img {
           height: 100%;
           width: 100%;
         }
       }
+    }
+  }
+  .common {
+    padding-top:100px;
+    box-sizing: border-box;
+    height: 750px;
+    section {
+      background: #00adef;
+      width: 150px;
+      margin: 0 auto;
+      height: 40px;
+      line-height: 40px;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
     }
   }
 }

@@ -58,7 +58,6 @@ export default {
     }
     this.handleCommand('zh_CN');
   },
-  // mounted() {},
   methods: {
     goto(name,id) {
       let obj = {
@@ -80,19 +79,6 @@ export default {
       this.$axios({
         method: "get",
         url: `${this.$baseurl}/bsl_web/base/language.do?lan=${command}`,
-        transformRequest: [
-          function(data) {
-            let ret = "";
-            for (let it in data) {
-              ret +=
-                encodeURIComponent(it) +
-                "=" +
-                encodeURIComponent(data[it]) +
-                "&";
-            }
-            return ret;
-          }
-        ],
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }

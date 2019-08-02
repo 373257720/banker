@@ -6,7 +6,7 @@
         <aside>
           <!-- <img src="../../assets/26566ffb301dac8c24d21969b538612.png" alt /> -->
         </aside>
-        <article>灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因为p标签放不下那么多的字而 多的字而的字而 灰色部分的是图片，因为p标签是块状元素，本来图片应该出现在第二行文字的下面，但是，却出现在了第二行文字的上面，经过分析，因为我给p标签的样式设置了宽度24px和高度，设置的行高也是24px，又因为p标签是块状元素，虽然，在视觉上看起来因</article>
+        <article v-html="article1"></article>
       </main>
       <footer>
         <button @click="$goto('home')">再考慮一下</button>
@@ -16,7 +16,7 @@
     <div class="project_intro2 con" v-if="!success">
       <nav>
         <img src="../../assets/19b9f427bcaefd8a3e879024299a204.png" alt />
-        <span>您已注册成功{{time}}s</span>
+        <span>您已签约成功{{time}}s</span>
       </nav>
     </div>
   </div>
@@ -28,10 +28,9 @@ export default {
     return {
       success: true,
       time: 3,
-      routeidx: null
-      // project_intro_length: ""
-      // A:this.$refs.article.offsetHeight
-      // project_intro_length: document.getElementById("article").offsetHeight
+      routeidx: null,
+      article1:
+      '<div>sdfsdf</br>fsdfdfsdfdfsdfdsdfsdfsdfsdfsdfsdfsdfsdreterdfffffffffffffffffffffffffffffffffffffffffffff</br>ddddddddddddddddddddd</div>'
     };
   },
   methods: {
@@ -53,8 +52,8 @@ export default {
       });
     }
   },
-  created() {
-    this.routeidx = this.$route.params.idx;
+  created() { 
+    this.routeidx = this.$route.query.idx;
     this.$axios({
       method: "get",
       url: `${this.$baseurl}/bsl_web/project/getProjectDetails?projectId=${this.routeidx}`
@@ -63,27 +62,14 @@ export default {
     });
   },
   mounted() {
-    // document.getElementById("project_intro").offsetHeight += document.getElementById(
-    //   "project_intro_length"
-    // ).offsetHeight;
-    // console.log(document);
-    // // console.log( document.getElementById("project_intro").offsetHeight,document.getElementById("project_intro_length").offsetHeight);
-    // var a = document.getElementById("project_intro").offsetHeight;
-    // // var b = document.getElementById("project_intro_length").offsetHeight;
-    // if (a < 1000) {
-    //   // a += b - a;
-    //   document.getElementById("project_intro").style.height = 1000 + "px";
-    //   document.getElementsByClassName("project_intro")[0].style.height =
-    //     1000 + "px";
-    // }
-    // console.log(a, b);
-    // document.getElementById("project_intro").offsetHeight+=document.getElementById("project_intro_length").offsetHeight;
   }
 };
 </script>
 <style lang="scss" scoped>
 #project_intro {
   width: 100%;
+  height: 760px;
+  overflow-y: auto;
   .project_intro2 {
     width: 553px;
     height: 760px;
@@ -126,7 +112,7 @@ export default {
     footer {
       width: 680px;
       display: flex;
-      margin: 20px auto;
+      margin: 20px  auto;
       justify-content: space-between;
       //   text-align: center
       button {

@@ -4,16 +4,16 @@
       <div class="title">
         <p>我的项目</p>
       </div>
-          <!-- //:transfer="transferdata"
-              //:tablehead="transferhead" -->
       <div class="box_tap">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="签约请求" name="1">
-            <historytable v-show="activeName==1"></historytable>
+            <signrequest v-if="activeName==1"></signrequest>
           </el-tab-pane>
           <el-tab-pane label="签约项目" name="2">
-            <historyexchange v-show="activeName==2"
-            ></historyexchange>
+            <signedpro v-if="activeName==2"></signedpro>
+          </el-tab-pane>
+          <el-tab-pane label="拒绝项目" name="3">
+            <refuselist v-if="activeName==3"></refuselist>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -21,18 +21,20 @@
   </div>
 </template>
 <script>
-import historytable from "@/components/pc/historytable";
-import historyexchange from "@/components/pc/historyexchange";
+import signrequest from "@/components/pc/signrequest";
+import signedpro from "@/components/pc/signed_pro";
+import refuselist from "@/components/pc/refuselist";
 export default {
   name: "history",
   components: {
-    historytable,
-    historyexchange
+    signrequest,
+    signedpro,
+    refuselist
   },
   data() {
     return {
       msg: 8888,
-      activeName:'1',
+      activeName: "1"
     };
   },
 
@@ -40,16 +42,7 @@ export default {
   methods: {
     //tap切换
     handleClick(tab, event) {
-      // this.transferhead.push(this.$t('history.DATE'), this.$t('history.Opeartion'), this.$t('history.Token'), this.$t('history.AMOUNT'),this.$t('history.Result'))
-    },
-    goto(name, id) {
-      // 路由传参
-      let obj = { name };
-      // console.log(obj)
-      if (id) {
-        obj.params = { id };
-      }
-      this.$router.push(obj);
+
     }
   }
 };

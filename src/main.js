@@ -14,12 +14,9 @@ Vue.component("topright", top_right);
 Vue.use(ElementUI);
 import global from '@/components/pc/global.js'
 Vue.prototype.$goto = function goto(name, id) {
-  // 路由传参
-  // console.log(name, id);
   let obj = {
     name
   };
-  // console.log(obj)
   if (id) {
     obj.params = {
         idx:id
@@ -33,7 +30,7 @@ axios.defaults.withCredentials = true;
 Vue.prototype.$axios = axios
 //设置baseurl
 var baseurl = {
-  api: "http://192.168.1.37:8080",
+  api: "http://192.168.1.37:80",
   //  api: "http://192.168.1.37:8080",
 }
 Vue.prototype.$baseurl = baseurl.api

@@ -19,8 +19,7 @@ export default {
   created() {},
   methods: {
     handleCommand(command) {
-      // var usertype = sessionStorage.getItem("usertype");
-      var usertype =1;
+      var usertype = sessionStorage.getItem("usertype");
       if (command == "userpass") {
         this.$goto("userpass");
       } else if (command == "mysign") {

@@ -76,8 +76,8 @@ export default {
           } else if (rescode == 10012) {
             this.remind="邮箱地址无效请重新输入"
           } else if ((rescode = 10014)) {
-            // this.remind="该邮箱已注册，请登录"
-             this.$goto("usercheck");
+            this.remind="该邮箱已注册，请登录"
+            //  this.$goto("login");
           }
         });
       } else {

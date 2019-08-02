@@ -23,28 +23,27 @@
               :key="item.id"
             >
               <div class="project_content_top">
-                <img :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`" alt />
-                <!-- :class="{'active':item.projectStatus==2}" -->
-                <p v-if="item">
+                <img :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`" :class="{'active':item.projectStatus==2}" alt />
+                <p v-if="item.projectStatus==2?true:false">
                   <span>{{item.projectStatus==2?'已签约':''}}</span>
                 </p>
               </div>
               <div class="project_content_bottom">
                 <p>项目名称：{{item.projectName}}</p>
                 <p>计划时间：{{item.projectStartTime}}</p>
-                <button @click="$goto('project_intro',item.projectId)">签约</button>
+                <button @click="goto('project_intro',item.projectId)">签约</button>
               </div>
             </li>
           </ul>
           <section v-if="fillter.length<=0">暂无记录</section>
-        </div>
+        </div>  
         <div class="page">
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
             :page-size="pagesize"
             layout="total,prev, pager, next, jumper"
-            :total="this.fillter.length"
+            :total="this.pageTotal"
           ></el-pagination>
         </div>
       </article>
@@ -60,13 +59,17 @@ export default {
       search: "",
       currentPage: 1,
       pagesize: 6,
-      fillter: []
+      fillter: [],
+      pageTotal:null,
     };
   },
   created() {
     this.prolists(this.currentPage, this.pagesize, this.search);
   },
   methods: {
+    goto(name1,id){
+      this.$router.push({name: name1, query: {idx: id}})    
+    },
     prolists(currentPage, pagesize, searchkey) {
       this.$axios({
         method: "get",
@@ -80,6 +83,7 @@ export default {
         if (res.data.resultCode == 10090) {
           this.$goto("login");
         } else if (res.data.resultCode == 10000) {
+          this.pageTotal=res.data.data.pageTotal;
           this.fillter = [...res.data.data.lists];
           this.fillter.forEach(item => {
             item.projectStartTime = this.$global.timestampToTime(
@@ -89,11 +93,12 @@ export default {
         }
       });
     },
-    handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
-    },
+    // handleSizeChange(val) {
+    //   // this.prolists(this.currentPage, this.pagesize, this.search);
+    //   // console.log(`每页 ${val} 条`);
+    // },
     handleCurrentChange(val) {
-      this.currentPag = val;
+        this.prolists(val, this.pagesize, this.search);
     }
   }
 };

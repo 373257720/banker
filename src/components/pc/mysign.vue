@@ -2,7 +2,7 @@
   <div id="mysign">
     <div class="mysign con">
       <nav>我的签约项目</nav>
-      <ul>
+      <ul v-if="fillter.length>0">
         <li
           v-for="item in fillter.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
           :key="item.projectName"
@@ -12,6 +12,9 @@
           <section>计划時間:{{item.projectStartTime}}</section>
         </li>
       </ul>
+      <section v-if="fillter.length<=0">
+        暂无记录
+      </section>
       <div class="page" v-if="fillter.length>0">
         <el-pagination
           @current-change="handleCurrentChange"
@@ -21,6 +24,7 @@
           :total="fillter.length"
         ></el-pagination>
       </div>
+      
     </div>
   </div>
 </template>
@@ -64,9 +68,11 @@ export default {
 <style lang="scss" scoped>
 #mysign {
   width: 100%;
-  height: 875;
+  height: 800;
+  overflow: hidden;
   .mysign {
-    height: 875px;
+    height: 800px;
+      overflow: hidden;
     nav {
       margin-top: 50px;
       font-size: 36px;
@@ -91,6 +97,15 @@ export default {
         background: #00adef;
         color: white;
       }
+    }
+    section{
+      margin: 0 auto;
+      width: 665px;
+      font-size: 20px;
+      text-align: center;
+      padding-top:100px;
+      height: 400px;
+      box-sizing: border-box;
     }
     .page {
       text-align: center;

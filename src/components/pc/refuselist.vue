@@ -1,5 +1,5 @@
 <template>
-  <div class="historyexchange">
+  <div class="refuselist">
     <el-table
       :data="fillter.slice((currpage - 1) * pagesize, currpage * pagesize)"
       style="width: 100%"
@@ -30,9 +30,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column :label="tablehead[4]">
+         <el-table-column :label="tablehead[4]">
         <template slot-scope="scope">
-          <el-button size="mini" @click="$goto('goods_details',scope.row.projectId)">查看</el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,67 +68,31 @@ export default {
     };
   },
   computed: {
-    type: function() {
-      return [
-        // this.$t("history.send"),
-        // this.$t("history.withdrawl"),
-        // this.$t("history.deposit"),
-        // this.$t("history.ftof"),
-        // this.$t("history.fton"),
-        // this.$t("history.ntof"),
-        // this.$t("history.nton"),
-        // this.$t("history.fee")
-      ];
-    },
-    resultimg: function() {
-      return [
-        {
-          inf: this.$t("history.done")
-          // text: require("../assets/rusult_complete.png")
-        },
-        {
-          inf: this.$t("history.pending")
-          // text: require("../assets/2517c241736f218dd6561f2dab31812.png")
-        },
-        {
-          inf: this.$t("history.declined")
-          // text: require("../assets/result_failed.png")
-        }
-      ];
-    }
   },
-  created() {
-    
-       
+  created() {   
     this.$axios({
       method: "get",
       url: `${this.$baseurl}/bsl_web/projectSign/project`,
       params: {
-        projectStatus: 2,
+        signStatus: 2,
         pageIndex: this.currpage,
         pageSize: this.pagesize
       }
     }).then(res => {
        this.fillter = [...res.data.data.lists];  
       this.fillter.forEach((item)=>{
-
          item.projectStartTime= this.$global.timestampToTime(item.projectStartTime) 
          item.signTime=this.$global.timestampToTime(item.signTime) 
       }) 
     });
-    // for (let i = 0; i < this.fillter.length; i++) {
-    //   var str = this.fillter[i].CreatedStr;
-    //   var date = str.slice(0, 2);
-    //   var month = str.slice(3, 5);
-    //   var year = str.slice(6, 10);
-    //   var time = str.slice(11);
-    //   str = `${year}-${month}-${date} ${time}`;
-    //   this.fillter[i].CreatedStr = str;
-    // }
   },
   methods: {
+    handleEdit(idx,row){  
+      this.$router.push({name:'goods_details', query: {projectid: row.projectId,userid:row.signUserId}})    
+    },
     handleCurrentChange(cpage) {
       this.currpage = cpage;
+       this.changepage(2,this.currpage,this.pagesize)
     },
     handleSizeChange(psize) {
       this.pagesize = psize;
@@ -158,7 +122,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-.historyexchange {
+.refuselist {
   // position: relative;
   .el-table td,
   .el-table th {
@@ -219,7 +183,7 @@ export default {
   position: relative;
   // height: 1000px;
 }
-.historyexchange {
+.refuselist {
   height: 500px;
 }
 </style>
