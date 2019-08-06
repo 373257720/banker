@@ -76,6 +76,9 @@ export default {
       method: "get",
       url: `${this.$baseurl}/bsl_web/user/getAuthDetails`
     }).then(res => {
+       if (res.data.resultCode == 10090) {
+        this.$goto("login");
+      };
       this.status = res.data.data.optStatus;
       if (res.data.data.optStatus == 2) {
         this.user_type = res.data.data.userType;

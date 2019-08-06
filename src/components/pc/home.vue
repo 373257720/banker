@@ -23,20 +23,25 @@
               :key="item.id"
             >
               <div class="project_content_top">
-                <img :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`" :class="{'active':item.projectStatus==2}" alt />
-                <p v-if="item.projectStatus==2?true:false">
-                  <span>{{item.projectStatus==2?'已签约':''}}</span>
+                <img
+                  :src="`http://192.168.1.37:8080${item.picList[0].projectPic}`"
+                  :class="{'active':item.projectStatus==2}"
+                  alt
+                />
+                <p v-if="item.signStatus==2?true:false">
+                  <span>{{item.signStatus==2?'已签约':''}}</span>
                 </p>
               </div>
               <div class="project_content_bottom">
                 <p>项目名称：{{item.projectName}}</p>
                 <p>计划时间：{{item.projectStartTime}}</p>
-                <button @click="goto('project_intro',item.projectId)">签约</button>
+                <button v-if="usertype==4" @click="goto('project_intro',item.projectId)">签约</button>
+                <button v-else-if="usertype==1" @click="handleEdit('goods_details',item.projectId,item.signUserId)">查看</button>
               </div>
             </li>
           </ul>
           <section v-if="fillter.length<=0">暂无记录</section>
-        </div>  
+        </div>
         <div class="page">
           <el-pagination
             @current-change="handleCurrentChange"
@@ -60,15 +65,23 @@ export default {
       currentPage: 1,
       pagesize: 6,
       fillter: [],
-      pageTotal:null,
+      pageTotal: null,
+      usertype: ""
     };
   },
   created() {
+    this.usertype = sessionStorage.getItem("usertype");
     this.prolists(this.currentPage, this.pagesize, this.search);
   },
   methods: {
-    goto(name1,id){
-      this.$router.push({name: name1, query: {idx: id}})    
+    goto(name1, id) {
+      this.$router.push({ name: name1, query: { idx: id } });
+    },
+    handleEdit(name1,projectid,signUserId) {
+      this.$router.push({
+        name: name1,
+        query: { projectid: projectid, userid: signUserId }
+      });
     },
     prolists(currentPage, pagesize, searchkey) {
       this.$axios({
@@ -83,7 +96,8 @@ export default {
         if (res.data.resultCode == 10090) {
           this.$goto("login");
         } else if (res.data.resultCode == 10000) {
-          this.pageTotal=res.data.data.pageTotal;
+          // console.log(res.data.data.lists[0].picList[0]);
+          this.pageTotal = res.data.data.pageTotal;
           this.fillter = [...res.data.data.lists];
           this.fillter.forEach(item => {
             item.projectStartTime = this.$global.timestampToTime(
@@ -98,7 +112,7 @@ export default {
     //   // console.log(`每页 ${val} 条`);
     // },
     handleCurrentChange(val) {
-        this.prolists(val, this.pagesize, this.search);
+      this.prolists(val, this.pagesize, this.search);
     }
   }
 };

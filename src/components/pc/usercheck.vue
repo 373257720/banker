@@ -176,6 +176,9 @@ export default {
         }
       })
       .then(res => {
+         if (res.data.resultCode == 10090) {
+        this.$goto("login");
+      };
         this.countrydata = [...res.data.data];
         //  console.log(this.countrydata);
       })

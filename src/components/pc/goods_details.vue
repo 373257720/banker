@@ -25,7 +25,7 @@
           <img :src="pic" alt />
         </aside>
       </main>
-      <footer @click="$goto('mysign_pro')">返回</footer>
+      <footer @click="back">返回</footer>
     </div>
   </div>
 </template>
@@ -75,28 +75,43 @@ export default {
     // console.log(this.$route.query);
     this.routeidx = this.$route.query.projectid;
     this.userid = this.$route.query.userid;
-    this.$axios({
-      method: "get",
-      url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}&signUserId=${this.userid}`
-    }).then(res => {
-      this.proname = res.data.data.projectName;
-      this.pic = "http://192.168.1.37:8080" + res.data.data.picList[0].projectPic;
-      this.protime = this.$global.timestampToTime(
-        res.data.data.projectStartTime
-      );
-      this.details_lists[0].content = res.data.data.projectCompany;
-      this.details_lists[1].content =
-        res.data.data.publicCompany == false ? "否" : "是";
-      this.details_lists[2].content = res.data.data.projectDescribe;
-      this.details_lists[3].content = res.data.data.collectMoney;
-      this.details_lists[4].content = res.data.data.projectMobile;
-      this.details_lists[5].content = res.data.data.projectEmail;
-      if (res.data.data.userCompanyCh) {
-        this.details_lists[6].content = res.data.data.userCompanyCh
+    this.details(this.routeidx, this.userid);
+  },
+  methods: {
+    back() {
+      this.$router.go(-1); //返回上一层
+    },
+    details(projectid, userid) {
+      var urll;
+      if (userid) {
+        urll = `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${projectid}&signUserId=${userid}`;
       } else {
-        this.details_lists.pop();
+        urll = `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${projectid}`;
       }
-    });
+      this.$axios({
+        method: "get",
+        url: urll
+      }).then(res => {
+        this.proname = res.data.data.projectName;
+        this.pic =
+          "http://192.168.1.37:8080" + res.data.data.picList[0].projectPic;
+        this.protime = this.$global.timestampToTime(
+          res.data.data.projectStartTime
+        );
+        this.details_lists[0].content = res.data.data.projectCompany;
+        this.details_lists[1].content =
+          res.data.data.publicCompany == false ? "否" : "是";
+        this.details_lists[2].content = res.data.data.projectDescribe;
+        this.details_lists[3].content = res.data.data.collectMoney;
+        this.details_lists[4].content = res.data.data.projectMobile;
+        this.details_lists[5].content = res.data.data.projectEmail;
+        if (res.data.data.userCompanyCh) {
+          this.details_lists[6].content = res.data.data.userCompanyCh;
+        } else {
+          this.details_lists.pop();
+        }
+      });
+    }
   }
 };
 </script>
@@ -149,12 +164,12 @@ export default {
         width: 320px;
         height: 400px;
         border-radius: 5px;
-        overflow:hidden;
+        overflow: hidden;
         // background: red;
         border: 1px solid #ababab;
-        img{
-            width: 320px;
-        height: 400px;
+        img {
+          width: 320px;
+          height: 400px;
         }
       }
     }

@@ -48,6 +48,9 @@ export default {
         pageSize: this.pagesize
       }
     }).then(res => {
+       if (res.data.resultCode == 10090) {
+        this.$goto("login");
+      };
       this.fillter = [...res.data.data.lists];  
       this.fillter.forEach((item)=>{
          item.projectStartTime= this.$global.timestampToTime(item.projectStartTime) 

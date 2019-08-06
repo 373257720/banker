@@ -30,7 +30,7 @@
           </div>
         </template>
       </el-table-column>
-         <el-table-column :label="tablehead[4]">
+      <el-table-column :label="tablehead[4]">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
         </template>
@@ -45,7 +45,6 @@
       :total="this.fillter.length"
     ></el-pagination>
   </div>
-
 </template>
 <script>
 export default {
@@ -58,7 +57,7 @@ export default {
       currpage: 1,
       fillter: [],
       tablehead: ["申请时间", "申请中间人", "项目名称", "计划时间", "操34作"],
-      routeidx:''
+      routeidx: ""
       //当前页数
       //sort-change绑定方法具有参数：column，这是一个对象
       // column: {
@@ -67,32 +66,39 @@ export default {
       // },
     };
   },
-  computed: {
-  },
-  created() {   
+  computed: {},
+  created() {
     this.$axios({
       method: "get",
       url: `${this.$baseurl}/bsl_web/projectSign/project`,
       params: {
-        signStatus: 2,
+        signStatus: 3,
         pageIndex: this.currpage,
         pageSize: this.pagesize
       }
     }).then(res => {
-       this.fillter = [...res.data.data.lists];  
-      this.fillter.forEach((item)=>{
-         item.projectStartTime= this.$global.timestampToTime(item.projectStartTime) 
-         item.signTime=this.$global.timestampToTime(item.signTime) 
-      }) 
+      if (res.data.resultCode == 10090) {
+        this.$goto("login");
+      }
+      this.fillter = [...res.data.data.lists];
+      this.fillter.forEach(item => {
+        item.projectStartTime = this.$global.timestampToTime(
+          item.projectStartTime
+        );
+        item.signTime = this.$global.timestampToTime(item.signTime);
+      });
     });
   },
   methods: {
-    handleEdit(idx,row){  
-      this.$router.push({name:'goods_details', query: {projectid: row.projectId,userid:row.signUserId}})    
+    handleEdit(idx, row) {
+      this.$router.push({
+        name: "goods_details",
+        query: { projectid: row.projectId, userid: row.signUserId }
+      });
     },
     handleCurrentChange(cpage) {
       this.currpage = cpage;
-       this.changepage(2,this.currpage,this.pagesize)
+      this.changepage(2, this.currpage, this.pagesize);
     },
     handleSizeChange(psize) {
       this.pagesize = psize;

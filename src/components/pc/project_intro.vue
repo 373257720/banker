@@ -30,7 +30,7 @@ export default {
       time: 3,
       routeidx: null,
       article1:
-      '<div>sdfsdf</br>fsdfdfsdfdfsdfdsdfsdfsdfsdfsdfsdfsdfsdreterdfffffffffffffffffffffffffffffffffffffffffffff</br>ddddddddddddddddddddd</div>'
+        "<div>sdfsdf</br>fsdfdfsdfdfsdfdsdfsdfsdfsdfsdfsdfsdfsdreterdfffffffffffffffffffffffffffffffffffffffffffff</br>ddddddddddddddddddddd</div>"
     };
   },
   methods: {
@@ -39,7 +39,9 @@ export default {
         method: "get",
         url: `${this.$baseurl}/bsl_web/projectSign/sign?projectId=${this.routeidx}`
       }).then(res => {
-        if (res.data.resultCode == 10000) {
+        if (res.data.resultCode == 10090) {
+          this.$goto("login");
+        } else if (res.data.resultCode == 10000) {
           this.success = !this.success;
           var aa = setInterval(() => {
             --this.time;
@@ -52,7 +54,7 @@ export default {
       });
     }
   },
-  created() { 
+  created() {
     this.routeidx = this.$route.query.idx;
     this.$axios({
       method: "get",
@@ -61,8 +63,7 @@ export default {
       console.log(res);
     });
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 <style lang="scss" scoped>
@@ -73,7 +74,7 @@ export default {
   .project_intro2 {
     width: 553px;
     height: 760px;
-    padding-top:100px;
+    padding-top: 100px;
     box-sizing: border-box;
     text-align: center;
     nav {
@@ -112,7 +113,7 @@ export default {
     footer {
       width: 680px;
       display: flex;
-      margin: 20px  auto;
+      margin: 20px auto;
       justify-content: space-between;
       //   text-align: center
       button {

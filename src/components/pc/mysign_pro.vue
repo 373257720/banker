@@ -6,14 +6,14 @@
       </div>
       <div class="box_tap">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="签约请求" name="1">
-            <signrequest v-if="activeName==1"></signrequest>
+          <el-tab-pane label="签约请求" name="0">
+            <signrequest v-if="activeName==0"></signrequest>
           </el-tab-pane>
-          <el-tab-pane label="签约项目" name="2">
-            <signedpro v-if="activeName==2"></signedpro>
+          <el-tab-pane label="签约项目" name="1">
+            <signedpro v-if="activeName==1"></signedpro>
           </el-tab-pane>
-          <el-tab-pane label="拒绝项目" name="3">
-            <refuselist v-if="activeName==3"></refuselist>
+          <el-tab-pane label="拒绝项目" name="2">
+            <refuselist v-if="activeName==2"></refuselist>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -34,15 +34,25 @@ export default {
   data() {
     return {
       msg: 8888,
-      activeName: "1"
+      activeName: '0'
     };
   },
 
-  created() {},
+  created() {
+    this.activeName=sessionStorage.getItem('tabindex')
+  },
+  mounted(){
+    var div = document.getElementById("app")
+    // console.log(div)
+    div.scrollTop = 0;
+  },
   methods: {
     //tap切换
     handleClick(tab, event) {
-
+        // console.log(tab.index);
+        this.activeName=tab.index;
+        sessionStorage.setItem('tabindex',tab.index)
+        
     }
   }
 };

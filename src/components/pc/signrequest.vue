@@ -64,42 +64,45 @@ export default {
       // },
     };
   },
-  computed: {
- 
-  },
+  computed: {},
   created() {
     // this.$global.changepage(this.$baseurl,1,this.currpage,this.pagesize,this.fillter)
     // console.log(this.$global.a);
-    this.changepage(1,this.currpage,this.pagesize)
-
+    this.changepage(1, this.currpage, this.pagesize);
   },
   methods: {
-    changepage (num,currpage,pagesize){
-          this.$axios({
-      method: "get",
-      url: `${this.$baseurl}/bsl_web/projectSign/project`,
-      params: {
-        signStatus: num,
-        pageIndex: currpage,
-        pageSize: pagesize
-      }
-    }).then(res => {
-      this.fillter = [...res.data.data.lists];
-      this.fillter.forEach(item => {
-        item.projectStartTime = this.$global.timestampToTime(
-          item.projectStartTime
-        );
-        item.signTime = this.$global.timestampToTime(item.signTime);
+    changepage(num, currpage, pagesize) {
+      this.$axios({
+        method: "get",
+        url: `${this.$baseurl}/bsl_web/projectSign/project`,
+        params: {
+          signStatus: num,
+          pageIndex: currpage,
+          pageSize: pagesize
+        }
+      }).then(res => {
+         if (res.data.resultCode == 10090) {
+        this.$goto("login");
+      };
+        this.fillter = [...res.data.data.lists];
+        this.fillter.forEach(item => {
+          item.projectStartTime = this.$global.timestampToTime(
+            item.projectStartTime
+          );
+          item.signTime = this.$global.timestampToTime(item.signTime);
+        });
       });
-    });
     },
-    handleEdit(idx,row){  
-      console.log(row);  
-      this.$router.push({name:'sign_request', query: {projectid: row.projectId,userid:row.signUserId}})    
+    handleEdit(idx, row) {
+      // console.log(row);
+      this.$router.push({
+        name: "sign_request",
+        query: { projectid: row.projectId, userid: row.signUserId }
+      });
     },
     handleCurrentChange(cpage) {
       this.currpage = cpage;
-       this.changepage(1,this.currpage,this.pagesize)
+      this.changepage(1, this.currpage, this.pagesize);
     },
     handleSizeChange(psize) {
       this.pagesize = psize;

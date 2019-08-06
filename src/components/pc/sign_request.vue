@@ -56,14 +56,16 @@ export default {
       routeidx: "",
       textarea: "",
       starttime: "",
-      userid:''
+      userid: ""
     };
   },
   methods: {
-    
-    pro_sign(userid,projectid,num) {
-       var textarea=this.textarea.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
-    // console.log(this.$route.query.projectId);
+    pro_sign(userid, projectid, num) {
+      var textarea = this.textarea
+        .replace(/\r\n/g, "<br/>")
+        .replace(/\n/g, "<br/>")
+        .replace(/\s/g, "&nbsp;");
+      // console.log(this.$route.query.projectId);
       this.$axios({
         method: "post",
         url: `${this.$baseurl}/bsl_web/projectSign/projectProponenSign`,
@@ -73,26 +75,28 @@ export default {
           signStatus: num,
           projectArticle: textarea
         },
-         transformRequest: [
-            function(data) {
-              let ret = "";
-              for (let it in data) {
-                ret +=
-                  encodeURIComponent(it) +
-                  "=" +
-                  encodeURIComponent(data[it]) +
-                  "&";
-              }
-              return ret;
+        transformRequest: [
+          function(data) {
+            let ret = "";
+            for (let it in data) {
+              ret +=
+                encodeURIComponent(it) +
+                "=" +
+                encodeURIComponent(data[it]) +
+                "&";
             }
-          ],
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            return ret;
           }
+        ],
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
       }).then(res => {
+        if (res.data.resultCode == 10090) {
+          this.$goto("login");
+        }
         // console.log(res.data.resultCode);
-        if(res.data.resultCode==10000){
-          
+        if (res.data.resultCode == 10000) {
         }
       });
     }
@@ -105,8 +109,9 @@ export default {
       method: "get",
       url: `${this.$baseurl}/bsl_web/projectSign/getSignDetails?projectId=${this.routeidx}`
     }).then(res => {
-      console.log(res.data.data);
-      this.pic ="http://192.168.1.37:8080" + res.data.data.picList[0].projectPic;
+      // console.log(res.data.data);
+      this.pic =
+        "http://192.168.1.37:8080" + res.data.data.picList[0].projectPic;
       this.array = { ...res.data.data };
       for (var key in this.array) {
         if ((key = "projectStartTime")) {
